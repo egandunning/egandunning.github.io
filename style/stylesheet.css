@@ -1,0 +1,79 @@
+body {
+  background-image: url("water.jpg");
+  background-repeat: no-repeat;
+  font-family: Helvetica, sans-serif;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+h1 {
+  background-color: white;
+  margin-left: 5%
+}
+
+h2 {
+  margin-left: 5%
+}
+
+h3 {
+  margin-left: 5%
+}
+
+h4 {
+  margin-left: 5%
+}
+
+h5 {
+  margin-left: 5%
+}
+
+div {
+  background-color: white;
+  border-left: solid blue 5px;
+  margin-top: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+div.code {
+  font-family: Courier, monospace;
+}
+
+p {
+  margin-left: 6%;
+  margin-right: 5%;
+}
+
+header {
+  background-color: blue;
+  color: white;
+  font-size: 150%;
+  padding: 10px;
+}
+
+header table {
+  border-spacing: 10px;
+}
+
+header a {
+  color: white
+}
+
+header a:link {
+  text-decoration: none;
+}
+
+header a:visited {
+  text-decoration: none;
+}
+
+header a:hover {
+  text-decoration: underline;
+}
+
+header a:active {
+  text-decoration: none;
+}
+

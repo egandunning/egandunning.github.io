@@ -1,0 +1,42 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+<title>About</title>
+</head>
+<body>
+
+<header id="header">
+  <script src="header.js"></script>
+</header>
+<div>
+<h1>Project Proposal</h1>
+
+<h3>Cryptography Learning Tool</h3>
+<h5>Egan Dunning B.S. in CS</h5>
+<h5>Philip Passantino B.S. in CS</h5>
+<h5>Quinton Teas B.S. in CS</h5>
+<h5>CSCI 499, 2016-2017</h5>
+<h5>Source Code: https://github.com/egandunning/learn-crypto</h5>
+<h4>Abstract</h4>
+<p>
+We intend to create a program that teaches its users cryptography concepts. The program will be a desktop app that will crack encrypted data. Using this, we will show our users circumstances where encryption is secure and circumstances where encryption is not secure.
+<h4>Introduction</h4>
+<p>
+We chose this project because we want to learn about encryption and how to use it to create secure programs. This project is important because computer security is an issue that software designers and programmers need to take into account when writing software. This program is meant to be a learning tool for computer science students, as well as anyone who has an interest in learning what makes encryption and hashing secure. We hope to learn how to program in OpenCL and how to use cryptography to make software secure. Egan has done some background reading on topics of cryptography, and encryption algorithms and standards. Egan is also currently taking an online course on cryptography. Philip has done research on OpenCL and what it takes to run code using it.
+<h4>Educational Goals</h4>
+<p>
+Our primary educational goal will be to learn how to make this project execute on the GPU using OpenCL. Software developers will be looking out for those who have this skill because many applications run in parallel. We will also learn under what conditions hashing and encryption is secure. We are honestly not sure how to encrypt data or hash it safely. Nor are we sure under what conditions encrypted or hashed data is safe from be cracked. Once we know about the safety of encryption and hashing we plan on informing others by allowing them to download our application from one of our websites. We can determine that our educational goals are complete when we can comfortably write a program that can execute on the GPU. Also, we will know we have successfully taught others about encryption security when we share our program with people who do not have knowledge on encryption and they understand encryption security after using the application. One way we can teach users of this program about encryption and hashing is by including written explanations of what is going on behind the scenes of an encryption or hashing algorithm. We will have successfully learned about cryptography and its applications if we are able to write a program that can crack encrypted messages or reverse a hash. 
+<h4>Functional Goals</h4>
+<p>
+The functional goal of this project is to create a cross platform graphical user interface application. This application will be written in C++. The application will teach users about hashing and RSA encryption by displaying messages to the user and leading them through how to use the application. The application will try to break hashing and RSA encryption. It will do so using multiple algorithms that we will write. For hashing we will write three algorithms: one that runs only on the CPU, one that runs on the CPU and the GPU, and one that takes a set of likely passwords into account. For RSA encryption we will write two algorithms: one that only uses the CPU and one that uses both the CPU and GPU. The algorithms will be based on factoring prime numbers to find the key. Our application will include a graph of time vs key length or hash length for each algorithm. The graph will display the time it takes for certain algorithms to reverse a hash or find the secret key of a message encrypted with RSA. The program will also estimate how much time it would take to reverse a longer hash or compute a larger RSA secret key.
+<h4>Predicted Requirements</h4>
+<p>
+We would like a workroom in Morken, with a computer that has a dedicated graphics card or integrated graphics to test the strength of hashing and RSA encryption. We would highly appreciate it if we had administrative access to this computer so that we could download and install the software we need to write our program. We plan on using free online resources and the PLU library for research. These online resources will include software libraries such as Qt, software tools such as Eclipse, and sample code that teaches us how to use OpenCL. Dr. Wolff's expertise will be our most important resource, as he has experience with OpenCL and the algorithms we will need to implement and crack hashing and RSA encryption.
+<h4>Predicted Challenges</h4>
+<p>
+One of the greatest challenges we will need to overcome is that we have to research RSA encryption and hashing algorithms to implement them into our program. Depending on which cryptographic algorithms we use, we might have to implement mathematics that the group could be unfamiliar with. The algorithms could be even more complicated for attempting to break the hashed and RSA encrypted data. We also need to learn how to make a program with a graphical interface in C++. We plan on using the Qt framework to make the graphical user interface, so we will need to learn how to use Qt to make a C++ application with a graphical user interface. One way to make this easier is to use a software tool that aids programmers in writing graphical user interfaces for applications. We are not sure if such a software tool exists for Qt. Regardless, Dr. Wolff's preferred way of writing these types of applications using Qt is to do it all without the fancy software tools. We will rely on his expertise in this area should no software tool exist for Qt. Learning how to use OpenCL will be another challenge for us. OpenCL requires pages of code just to run simple programs. We are not sure how much code will be required to run a complicated program like ours, but we hope that it will not be much more than is required to run a simple program. The C++ code to use OpenCL is also confusing. It is not easily apparent why certain C++ functions are required to run OpenCL. Early on in the project we would test OpenCL code to get used to it. Also, to understand how to use it in conjunction with a graphical user interface we would write a tiny one button graphical user interface that runs some OpenCL code. The further on we get into our project we will be able to add on and run decryption method tests from our program. Learning all of these new technologies we may take in too much and not use everything we research. This could take time away from implementing the program. Many of our challenges would involve research and learning how to use new programming languages and techniques. Doing more research than implementation, our group might have trouble finishing what we intend to make. To combat this we can only assign a certain amount of sprints to research so we do not research for too long. Doing this we would be forced to make a quick decision on technologies. Speaking of sprints, we will learn from the mistakes many teams made in the Objects and Design course. Our sprints will have focused, specific, and reachable goals. Each sprint we will rotate our focus. One sprint Egan might focus on the graphical user interface, while Philip focuses on using OpenCL and Quinton researches algorithms. Then we would switch roles during the next sprint so that we do not specialize in one area. Another possibility is that we all work on one part of the project together and focus on getting that done with speed, efficiency, and quality.
+
+</div>
+</body>
+</html> 
