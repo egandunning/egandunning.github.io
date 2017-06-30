@@ -1,9 +1,9 @@
 body {
   background-image: url("water.jpg");
-  background-repeat: no-repeat;
-  font-family: Helvetica, sans-serif;
-  margin-left: 20%;
-  margin-right: 20%;
+  background-repeat: repeat;
+  font-family: Verdana, sans-serif;
+  margin: auto;
+  max-width: 50em;
 }
 
 h1 {
@@ -30,15 +30,17 @@ h5 {
 div {
   background-color: white;
   border-left: solid blue 5px;
-  margin-top: 10px;
+  margin-top: 1em;
   padding-left: 5%;
   padding-right: 5%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
-div.code {
-  font-family: Courier, monospace;
+div.pic {
+  padding: 0.5em 0em 0em 0em;
+  border: none;
+  background-color: white;
 }
 
 p {
@@ -46,15 +48,43 @@ p {
   margin-right: 5%;
 }
 
+ul {
+  margin-left: 6%;
+  margin-right: 5%;
+}
+
+img {
+  max-width: 50em;
+}
+
+.portrait {
+  float: left;
+  padding: 1em 1em 1em 0em;
+  height: 15em;
+}
+
+footer {
+  background-color: blue;
+  color: white;
+  padding: 1em;
+  bottom: 0;
+  max-width: 50em;
+  margin-top: 1em;
+}
+
+footer a {
+	color: white;
+}
+
 header {
   background-color: blue;
   color: white;
   font-size: 150%;
-  padding: 10px;
+  padding: 0.5em;
 }
 
 header table {
-  border-spacing: 10px;
+  border-spacing: 0.5em;
 }
 
 header a {
