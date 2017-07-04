@@ -1,5 +1,5 @@
 document.write(
-"<strong>Egan Dunning</strong>" +
+"<strong style='font-size:150%'>Egan Dunning</strong>" +
 "<table><tr>" +
 "<td><a href='index.html'>Home</a> </td>" +
 "<td><a href='projects.html'>Projects</a></td>" +
