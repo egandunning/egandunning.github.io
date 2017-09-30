@@ -43,6 +43,39 @@ div.pic {
   background-color: white;
 }
 
+div.code {
+  position: relative;
+  margin: 1em;
+  padding: 1em;
+  border: 2px darkgrey;
+  border-style: solid;
+  border-radius: 1em;
+  margin-left: 6%;
+  margin-right: 5%;
+}
+
+.oneline {
+  white-space: nowrap;
+}
+
+.code > label {
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: right;
+  color: darkgrey;
+  padding: 0.5em;
+  margin: -2px;
+  border: 2px darkgrey;
+  border-style: solid;
+  border-top-right-radius: 1em;
+  border-bottom-left-radius: 1em;
+}
+
+code {
+  font-size: larger;
+}
+
 p {
   margin-left: 6%;
   margin-right: 5%;
