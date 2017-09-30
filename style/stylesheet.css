@@ -81,6 +81,10 @@ p {
   margin-right: 5%;
 }
 
+figcaption {
+  font-size: smaller;
+}
+
 ul {
   margin-left: 6%;
   margin-right: 5%;
