@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+<title>Egan Dunning</title>
+</head>
+<body>
+
+<header>
+  <script src="header.js"></script>
+</header>
+
+<div>
+<h1>Bluetooth mouse app</h1>
+  <h3>About project</h3>
+  <p>
+    This project has two parts: a bluetooth server that controls mouse and keyboard
+    inputs, and an android app that sends mouse movement information and keystrokes
+    to the bluetooth server.
+  </p>
+  <p>
+    My purpose was to make a remote mouse and keyboard for the Raspberry Pi. I
+    wanted to make the mouse user friendly and intuitive.
+  </p>
+  <h5>Server</h5>
+  <p>
+    The server is written in python for the bluez linux bluetooth stack. The server
+    accepts incoming connections and recieves data from the client device. After
+    the client closes the connection, the server is ready to accept another
+    connection.
+  </p>
+  <p>
+    Mouse and keyboard emulation is handled by xdotool, a linux command line
+    program.
+  </p>
+  <h5>Client</h5>
+  <p>
+    The client is an android application that acts as a touchpad and keyboard.
+    <figure>
+      <img src="documents/bluemouse/bluemouse-app.png" alt="android mouse app"/>
+      <figcaption>The android app. From here, users can disconnect from the server,
+      shut down the server machine and control mouse/keyboard input.</figcaption>
+    </figure>
+  </p>
+  
+  <h5>Bluetooth message structure</h5>
+  <p>
+    The client sends messages to the server in the following format:
+    <span class="oneline">[code character][data]</span>. The code character
+    specifies what type of data is sent. For example, to send mouse movement
+    data, the client sends the message <span class="oneline">"mx y"</span>
+    where x and y are the pixel amounts to move the mouse cursor on the server
+    machine. The message that moves the cursor 100 pixels down and 300 pixels to
+    the right is "m300 -100".
+  </p>
+  
+  <h5>Getting mouse data</h5>
+  <p>
+    To get mouse movement data in the android app, we can override the
+    <code>onTouchEvent</code> action listener. This method is called whenever
+    the user touches the phone screen. We want to record the distance the user
+    drags their finger on the screen, so we will need two point variables. One
+    point will represent the finger's starting postition, the second point will
+    represent the finger's ending position.
+  </p>
+  <p>
+    In order to make keeping track of points simple, we should make a Point
+    class (code linked below). In our Point class, we need to be able to access
+    and modify x and y coordinates, and do some basic vector arithmetic. For
+    convenience, we'll want a method that returns a string representation of the
+    point that is ready to send to the server.
+  </p>
+  
+  <h5>Sending mouse data</h5>
+  <p>
+    To send the string messages from the android app, get the
+    <code>OutputStream</code> from an open <code>BluetoothSocket</code>.
+  </p>
+  <div class="code">
+    <label>Java</label>
+    <code>
+      OutputStream os = serverSocket.getOutputStream();<br/>
+      String message = "m300 -100";
+    </code>
+  </div> 
+  <p>
+    In order to send the message to the server, we need to write the message to
+    the output stream. First we need to convert the string to a byte array.
+  </p>
+  <div class="code">
+    <label>Java</label>
+    <code>
+      os.write(message.getBytes());
+    </code>
+  </div>
+  <p>
+    Now the message has been sent to the server. The server has to recieve and
+    interpret the message and act accordingly. This loop recieves messages from
+    the connected client continuously:
+  </p>
+  <div class="code">
+    <label>Python</label>
+    <code>
+      while(True):<br/>
+      &nbsp;&nbsp;data = client_sock.recv(64)
+    </code>
+  </div>
+  <p>
+    Here, <code>client_sock</code> is the client socket. The <code>recv(64)
+    </code> method waits until the client sends a message, then reads 64 bytes
+    from that message. More than 64 bytes can be read if desired, but the
+    client sends short messages, so in this case a message size limit of 64
+    bytes should be plenty.
+  </p>
+  <p>
+    After receiving a message, the server separates the code character from the
+    data. Since the code character is always only on character, this separation
+    is easy. All we need to do is store the first character in a variable, and
+    then remove the first character from <code>data</code>.
+  </p>
+  <div class="code">
+    <label>Python</label>
+    <code>
+      code = data[0]<br/>
+      data = data[1:]
+    </code>
+  </div>
+  <p>
+    Now that the code character and the data are separate, we can handle
+    different types of messages from the client.
+  </p>
+  <div class="code">
+    <label>Python</label>
+    <code>
+      if code == "m": #mouse movement<br/>
+      &nbsp;&nbsp;os.system("xdotool mousemove_relative -- %s" % data)<br/>
+      elif code == "1": #mouse1<br/>
+      &nbsp;&nbsp;os.system("xdotool click 1")<br/>
+      elif code == "2": #mouse2<br/>
+      &nbsp;&nbsp;os.system("xdotool click 2")<br/>
+      <br/>...
+    </code>
+  </div>
+  <p>
+    The data is sent directly to xdotool by using <code>os.system()</code>,
+    which allows us to execute command line programs from our python code. The
+    xdotool option we use to move the mouse is <code>mousemove_relative --
+    </code>. <code class="oneline">xdotool mousemove_relative x y</code> tells
+    xdotool to move the cursor <code>x</code> pixels to the right and
+    <code>y</code> pixels up from the cursor's current position. The
+    <code>--</code> allows negative coordinates, such as 
+    <code class="oneline">xdotool mousemove_relative -- 0 -10</code>, which
+    moves the cursor 10 pixels down.
+  </p>
+  <p>
+    To emulate keystrokes, we use xdotool with the <code>key</code> option. For
+    example, to send the letter "a", use the command <code class="oneline">
+    xdotool key a</code>. Emulating letter keys is easy, but emulating special
+    characters is harder. The command <code class="oneline">xdotool key ,</code>
+    would fail and not emulate the "," key. The correct command to emulate a
+    comma keypress is <code class="oneline">xdotool key comma</code>. This means
+    we need to do some additional processing to convert character data to data
+    that xdotool can understand.
+  </p>
+  
+  <h5>Special characters</h5>
+  <p>
+    We need to convert special characters into strings of letters that xdotool
+    can read. I chose to do this conversion on the client side. This way, the
+    client can be modified to support more special characters while the server
+    is still running.
+  </p>
+  <p>
+    We can create a class to convert special characters to strings. In my
+    implementation, I wrote a method that takes a <code>KeyEvent</code> as input
+    and returns the correct xdotool character name.
+  </p>
+  <div class="code">
+    <label>Java</label>
+    <code>
+      public static String getXDoToolKey(KeyEvent event) {<br/>
+      &nbsp;&nbsp;int keyCode = event.getKeyCode();<br/>
+      &nbsp;&nbsp;switch(keyCode) {<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_DEL:<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "BackSpace";<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_PERIOD:<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "period";<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_SEMICOLON:<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "semicolon";<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;...
+    </code>
+  </div>
+  <p>
+    The <code>KeyEvent</code> class reports key events, and has static integer
+    fields that represent keys. Writing this conversion method was tedious,
+    since I could not find a list of all the possible xdotool key names, so I
+    had to guess and check.
+  </p>
+  
+  <h5>Sending keys</h5>
+  <p>
+    Sending keypresses over bluetooth is very similar to sending mouse movement
+    data over bluetooth. In the main activity, override the <code>onKeyUp</code>
+    listener.
+  </p>
+  <div class="code">
+    <label>Java</label>
+    <code>
+      @Override<br/>
+      public boolean onKeyUp(int keyCode, KeyEvent event) {<br/>
+      &nbsp;&nbsp;if(keyCode != KeyEvent.KEYCODE_BACK) {<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;sendKey(KeyCodeTranslator.getXDoToolKey(event));<br/>
+      &nbsp;&nbsp;}<br/>
+      &nbsp;&nbsp;return super.onKeyUp(keyCode, event);<br/>
+      }<br/><br/>
+      private void sendKey(String keys) {<br/>
+      &nbsp;&nbsp;try {<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;serverSocket.getOutputStream().write(("p"+keys).getBytes());<br/>
+      &nbsp;&nbsp;} catch(IOException e) {<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();<br/>
+      &nbsp;&nbsp;}<br/>
+      }
+    </code>
+  </div>
+  <p>
+    In the <code>onKeyUp</code> action listener, ignore the back button, since
+    it isn't part of the keyboard. Then translate the <code>KeyEvent</code> into
+    a string, then call <code>sendKey</code>, which writes the string to the
+    socket's output stream. The character code "p" tells the server to emulate a
+    key press.
+  </p>
+  
+  <h5>Closing the connection</h5>
+  <p>
+    When the user is done using the application, the server should be able to
+    close the connection, continue running, and accept another connection. In
+    the server code, the main loop calls the function called 
+    <code>connect_recv_loop() </code>that waits for a connection, then receives
+    and processes data, . When the server receives a disconnect message, the
+    function <code>connect_recv_loop()</code> returns true. If the server
+    receives a shutdown message, the function returns false.
+  </p>
+  
+  <div class="code">
+    <label>Python</label>
+    <code>
+    while(connect_recv_loop()):<br/>
+    &nbsp;&nbsp;print "connection closed"<br/><br/>
+    print "exiting"<br/>
+    #end of file
+    </code>
+  </div>
+  
+  <p>
+    This allows the server to accept a new connection after the current
+    connection closes. Inside <code>connect_recv_loop()</code>, if the code
+    character sent from the client is "c", the server closes the open sockets
+    and returns true.
+  </p>
+  
+  <div class="code">
+    <label>Python</label>
+    <code>
+    ...<br/>
+    elif code == "c": #close connection<br/>
+	&nbsp;&nbsp;close_resources()<br/>
+	&nbsp;&nbsp;return True<br/>
+    </code>
+  </div>
+  
+  <p>
+    If the client sends a message with the code character "s", <code>
+    connect_recv_loop()</code> tells the computer to shut down in 1 second and
+    returns false, causing main loop to exit, ending the program's execution.
+    Note that the shutdown feature only works on a machine that is configured to
+    not require a password for the "sudo shutdown" command. By default, the
+    raspberry pi doesn't require a password with sudo commands, so the shutdown
+    feature works just fine on a raspberry pi server.
+  </p>
+  
+  <div class="code">
+    <label>Python</label>
+    <code>
+      elif code == "s": #shutdown<br/>
+      &nbsp;&nbsp;os.system("sleep 1 &amp;&amp; sudo shutdown -h now")<br/>
+      &nbsp;&nbsp;close_resources()</br>
+      &nbsp;&nbsp;return False
+    </code>
+  </div>
+  
+  <p>
+    The app sends a disconnect message whenever the user presses the
+    "disconnect" or back button and when the user exits the app. The shutdown
+    message is sent when the user presses the "shutdown" button and confirms the
+    dialog.
+    <figure>
+      <img src="documents/bluemouse/bluemouse-app-shutdown.png" alt="android mouse app"/>
+      <figcaption>The shutdown dialog.</figcaption>
+    </figure>
+  </p>
+  
+  <h5>Server details</h5>
+  <p>
+    The server runs on the Raspbian operating system on a Raspberry Pi. To make
+    the server start when the Raspberry Pi starts up, add a desktop
+    configuration file to <code>~/.config/autostart</code> - I called my desktop
+    file bluemouse.desktop. Here are the contents of bluemouse.desktop:
+  </p>
+  <div class="code">
+    <code>
+      [Desktop Entry]<br/>
+      Type=Application<br/>
+      Name=bluemouse autostart<br/>
+      Comment=start bluemouse server<br/>
+      Exec=/home/pi/Desktop/server.py<br/>
+    </code>
+  </div>
+  <p>
+    This only works if both server.py and bluemouse.desktop have executable
+    permissions, and if the <code>Exec</code> line contains the correct path to
+    server.py.
+  </p>
+  
+  <h5>Possible improvements</h5>
+  <p>
+    Currently the app connects to a hardcoded device name, "raspberrypi", which
+    is fine if the user only wants to use the mouse for a raspberry pi with the
+    default bluetooth name. A better system would be to ask the user which
+    device to connect to upon opening the app.
+  </p>
+  <p>
+    Not all special characters can be translated into strings that xdotool
+    understands. This is because the method that converts <code>KeyCode</code>s
+    to strings doesn't support all special characters. Adding more conversions
+    would allow the user to send more types of symbols to the server.
+  </p>
+  <p>
+    Better scrolling- currently the only scroll buttons are the up and down
+    arrow keys. This makes scrolling very slow, a better solution would be to
+    implement two-finger scrolling like on a laptop touchpad.
+  </p>
+  
+  <h5>Code</h5>
+  <p><a href="documents/bluemouse/server.py">Python server</a></p>
+  <p><a href="documents/bluemouse/Point.java">Point class</a></p>
+  <p><a href="documents/bluemouse/KeyCodeTranslator.java">KeyCode translator class</a></p>
+  
+  <h5>Hardware</h5>
+  <p>
+    I ran the server code on the Raspberry Pi Model 3, which comes with bluetooth
+    and wifi, no dongles required.
+  </p>
+  
+  <h5>Links</h5>
+  <p><a href="www.bluez.org">BlueZ</a></p>
+  <p><a href="https://people.csail.mit.edu/albert/bluez-intro/c212.html">Bluetooth with python</a></p>
+  <p><a href="www.semicomplete.com/projects/xdotool">xdotool</a></p>
+  <p><a href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian</a></p>
+</div>
+
+<footer>
+  <script src="footer.js"></script>
+</footer>
+
+</body>
+</html> 
