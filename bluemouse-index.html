@@ -236,7 +236,7 @@
     close the connection, continue running, and accept another connection. In
     the server code, the main loop calls the function called 
     <code>connect_recv_loop() </code>that waits for a connection, then receives
-    and processes data, . When the server receives a disconnect message, the
+    and processes data. When the server receives a disconnect message, the
     function <code>connect_recv_loop()</code> returns true. If the server
     receives a shutdown message, the function returns false.
   </p>
