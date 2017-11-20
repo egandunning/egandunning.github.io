@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+<title>Egan Dunning</title>
+</head>
+
+<body>
+
+<header>
+  <script src="header.js"></script>
+</header>
+
+<div>
+  <h2>Pega Flashcards</h2>
+  <ul>
+    <li><a href="https://github.com/egandunning/learn-crypto">Github repository</a></li>
+  </ul>
+  <h3>About Project</h3>
+  <p>
+    This project is a command-line program that extracts key terms and their
+    definitions from the Pega Academy Glossary. Since this glossary is
+    proprietary, the user must create an account on the PDN (Pega Developer
+    Network). The glossary can be found by enrolling in a course on the PDN.
+    Start a lesson, then click the "Complete Glossary" link on the right side
+    of the page. The program is written for the glossary from the System
+    Architect Essentials course for Pega 7.2.
+  </p>
+  <p>
+    I wrote this program in Java, the program parses the html file looking for
+    <code>span</code> tags. The first <code>span</code> tag contains the key
+    term, the second <code>span</code> tag contains the definition. Each key,
+    definition pair is stored in an list which is serialized and written to
+    a file for easy access.
+  </p>
+  <p>
+    To review key terms, run the program with the <code>random</code> command
+    line argument. Press enter to bring up a key term, enter again to show the
+    definition, enter again to repeat.
+  </p>
+  <p>
+    To lookup definitions for terms, run the program with the
+    <code>lookup</code> command line argument. Enter a key term to look up
+    a definition. The search term is case insensitive.
+
+  <h3>Download</h3>
+  <ul>
+    <li>Includes glossary.jar, readme.txt, license.txt</li>
+    <li><a href="documents/pegaflashcards.zip">Download now</a> (6 KB)</li>
+  </ul>
+  <p>
+    SHA256 sum:
+    <code>acdef3313a4aebcfa4de2fc76ad20d38d6d917fc91264330aff9dc6411380707</code>
+  </p>
+  
+<footer>
+  <script src="footer.js"></script>
+</footer>
+
+</body>
+</html>
