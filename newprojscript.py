@@ -29,6 +29,7 @@ def newPage():
 
    #The content for the new page
    mainContent = '''<!DOCTYPE html><html><head>
+   <meta charset="UTF-8">
    <link rel="stylesheet" type="text/css" href="style/stylesheet.css">
    <title>Egan Dunning</title></head>
    <body>
