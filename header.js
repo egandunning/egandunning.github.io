@@ -3,6 +3,6 @@ document.write(
 "<nav><table><tr>" +
 "<td><a href='index.html'>Home</a> </td>" +
 "<td><a href='projects.html'>Projects</a></td>" +
-"<td><a href='documents/resume11-19.pdf'>Resume</a></td>" +
+"<td><a href='documents/resume11-29.pdf' target='_blank'>Resume</a></td>" +
 "</tr></table></nav>"
 );
