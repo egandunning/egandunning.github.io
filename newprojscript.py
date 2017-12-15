@@ -10,7 +10,7 @@ def newPage():
    if(len(sys.argv) != 5):
       print("Incorrect usage!!!")
       print("run the following command to generate a new project page:")
-      print("  python newprojscript.py 'filename(no extension)' 'project name' 'github repo URL' 'project description'")
+      print("  python newprojscript.py 'filename(no extension)' 'project name' 'link to github repo URL' 'project description'")
       return
 
    #file to put website content in
