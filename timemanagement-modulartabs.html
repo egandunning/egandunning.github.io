@@ -1,0 +1,86 @@
+<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+  <title>Egan Dunning</title></head>
+  <body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>Modular tabs in JavaFX</h2>
+    
+    <p>
+      In JavaFX, the UI and the application logic can be easily separated. 
+      The interface layout and design is written in FXML, and the logic goes
+      in a Java class.
+      FXML is an XML based markup language used for defining graphical user 
+      interfaces in JavaFX.
+    </p>
+
+    <p>
+      For more info about FXML, read
+      <a target="_blank" href="https://docs.oracle.com/javase/8/javafx/fxml-tutorial/why_use_fxml.htm">
+        Oracle's documentation</a>.
+    <p>
+      In the root tag of an FXML file, specify the fully-qualified (include 
+      the package name) Java class to use as a controller with the
+      <code>fx:controller</code> attribute.
+    </p>
+    <div class="code">
+      <label>FXML</label>
+      <code>
+        &lt;AnchorPane<br>
+        &nbsp;&nbsp;fx:controller="controllers.MainController"<br>
+        &nbsp;&nbsp;xmlns:fx="http://javafx.com/fxml/1">...
+      </code>
+    </div>
+
+
+    <h3>The problem</h3>
+    <p>
+      If we have one FXML file and one Java controller, both of these files
+      will be very large, hard to understand, and hard to debug. Using a
+      single controller makes development more difficult and is not
+      maintainable.
+    </p>
+
+    <h3>The solution</h3>
+    <p>
+      Modularize! Use the <code>fx:include</code> tag to include a FXML file
+      inside another FXML file.
+      Here is how the main window references the introduction tab that users
+      see when they first open the application:
+    </p>
+    <p>mainwindow.fxml</p>
+    <div class="code">
+      <label>FXML</label>
+      <code>
+        &lt;TabPane fx:id="tabPane"><br>
+        &nbsp;&nbsp;&lt;Tab fx:id="introTab" text="Welcome"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;fx:include source="intro_page.fxml"/><br>
+        &nbsp;&nbsp;&lt;/Tab>...
+      </code>
+    </div>
+    <p>introTab.fxml</p>
+    <div class="code">
+      <label>FXML</label>
+      <code>
+        &lt;GridPane fx:controller="controllers.InfoTab">
+      </code>
+    </div>
+
+    <p>
+      The root tag in introTab.fxml references the InfoTab.java file,
+      which is the controller for the information tab.
+    </p>
+    <p>
+      Now we can separate the logic for each tab into independent files,
+      making code easier to read by splitting a potentially large controller
+      class into smaller, more manageable files.
+    </p>
+    
+  <footer>
+    <script src="footer.js"></script>
+  </footer>
+  </body>
+  </html>
