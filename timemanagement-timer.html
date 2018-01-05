@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+    <title>Egan Dunning</title>
+  </head>
+  <body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>Making a timer in JavaFX</h2>
+    <p>
+      In the pomodoro tab in the Time Management Suite application, the
+      "tomato timer" is the main focus. In order to make a timer that performs
+      an action when it completes, we need to use the <code>Timer</code> and
+      <code>TimerTask</code> classes, located in <code>java.util</code>.
+    </p>
+    <h3><code>java.util.Timer</code></h3>
+    <p>
+      The <code>Timer</code> class schedules tasks to be executed later.
+      Creating a new <code>Timer</code> object spawns a new thread that
+      can execute code after a specified amount of time. The developer can
+      specify if the timer should run once, or at a repeated interval. To make
+      a timer that will print "hello world" after 10 seconds, do the following:
+    </p>
+      <div class="code">
+        <label>Java</label>
+        <code>
+          Timer myTimer = new Timer();<br>
+          myTimer.schedule(new TimerTask(){<br>
+          &nbsp;&nbsp;@Override<br>
+          &nbsp;&nbsp;public void run() {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("hello world");<br>
+          &nbsp;&nbsp;}<br>
+          }, 10000);
+        </code>
+      </div>
+    <p>
+      The above code creates an instance of the <code>Timer</code> class, which
+      creates a new thread. Then we call the <code>schedule</code> method, and
+      pass in an anonymous <code>TimerTask</code> class, overriding the
+      <code>run</code> method. The <code>run</code> method contains the code we
+      want to execute when the time is up. In our case, we print "hello world".
+      The next parameter we pass into the <code>schedule</code> method is the
+      delay in milliseconds. Since we want to print "hello world" after 10
+      seconds, we pass in 10,000 milliseconds for the delay. Now we
+      successfully have a non-blocking timer!
+    </p>
+    <p>
+      We can just as easily create a timer that will perform a task repeatedly
+      at a fixed interval. Just call <code>scheduleAtFixedRate</code>.
+    </p>
+    <div class="code">
+      <label>Java</label>
+      <code>
+        ...<br>
+        Timer myTimer = new Timer();<br>
+        myTimer.scheduleAtFixedRate(myTimerTask, 0, 10000);
+      </code>
+    </div>
+    <p>
+      This code creates a timer that executes a task immediately, and executes
+      the same task every 10000 milliseconds until told to stop with the
+      <code>cancel</code> method.
+    </p>
+    <p>
+      After calling <code>cancel</code> on a <code>Timer</code> object, the
+      timer can't be scheduled again.
+    </p>
+    <p>
+      The <code>Timer</code> class can have many more uses than creating simple
+      timers. We can, for example, schedule a task to run at a specific date.
+      Check out all the cool stuff you can do at the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/util/Timer.html">documentation</a>.
+    </p>
+    <h3><code>java.util.TimerTask</code></h3>
+    <p>
+      The <code>TimerTask</code> class is responsible for the code that can be
+      executed by the timer. <code>TimerTask</code> is an abstract class, it
+      extends <code>Runnable</code>, but does not implement the
+      <code>run</code> method. We can create a subclass of
+      <code>TimerTask</code> that overrides the <code>run</code> method, and
+      put all the code that needs to be run whenever the timer fires inside the
+      overridden <code>run</code> method. To put it all together, pass an
+      instance of the subclass to <code>Timer.schedule</code>. Alternatively,
+      we can pass an anonymous class to <code>Timer.schedule</code>, as seen
+      in the first example.
+    </p>
+    <h3>Issues with JavaFX</h3>
+    <p>
+      Everything we have seen so far isn't concerned with JavaFX. However, when
+      using timers in a JavaFX GUI, we can run into some issues. Inside the
+      overridden <code>run</code> method of a subclass of
+      <code>TimerTask</code>, we aren't able to set certain properties on UI
+      elements such as a <code>TextField</code>.
+    </p>
+    <p>
+      For example, if we try to set the <code>promptText</code> on a 
+      <code>TextField</code> object in a timer thread by calling the
+      <code>TextField.setPromptText</code> method, we will get the
+      exception:
+    </p>
+    <p>
+      <code class="danger">Exception in thread "Timer-0" 
+      java.lang.IllegalStateException: Not on FX application thread; 
+      currentThread = Timer-0</code>
+    </p>
+    <p>
+      This means that we need to call <code>TextField.setPromptText</code> on
+      the JavaFX application thread, instead of the timer thread - "Timer-0".
+      To execute this method on the JavaFX thread, we can use
+      <code>Platform.runLater</code>, which takes a <code>Runnable</code> as
+      it's only parameter. The code in the <code>run</code> of the passed in
+      <code>Runnable</code> is placed in the JavaFX event queue to be run
+      later. <code>runLater</code> returns immediately after placing the
+      passed in <code>Runnable</code> in the event queue, so this call is
+      non-blocking.
+    </p>
+    <p>
+      Since <code>Platform.runLater</code> takes <code>Runnable</code>, a
+      functional interface, as a parameter, we can use a lambda to execute the
+      <code>TextField.setPromptText</code> method safely.
+    </p>
+    <div class="code">
+      <label>Java</label>
+      <code>
+        Platform.runLater(() -> myTextField.setPromptText("Hi!"));
+      </code>
+    </div>
+    <p>
+      No more exceptions! Yay! When I was working on this program, I only
+      found this was a problem with the <code>TextField.setPromptText</code>,
+      but I'm sure there are other methods that need to execute on the JavaFX
+      main thread.
+    </p>
+
+    <h3>Make it noisy</h3>
+    <p>
+      Now we can make a timer that doesn't throw an exception in our JavaFX
+      application. But a timer needs to make some noise! We can use the
+      <code>AudioClip</code> class provided in the JavaFX library. To use it,
+      we just need to create an instance, passing a sound file to the
+      constructor, then call <code>play</code>.
+    </p>
+    <div class="code">
+      <label>Java</label>
+      <code>
+        AudioClip myClip = new AudioClip(getClass().getClassloader()<br>
+        &nbsp;&nbsp;.getResource("Bell.mp3").toString());<br>
+        myClip.play();
+      </code>
+    </div>
+    <p>
+      In the example, we need to have a file called "Bell.mp3" on the classpath
+      for the code to run without error. If we want to specify a volume, we can
+      by passing a double between 0 and 1 to <code>play</code>. Note that since
+      <code>AudioClip</code> loads the entire sound file into memory, the class
+      is not well suited for large sound files.
+    </p>
+    <h3>Sample Code</h3>
+    <p>
+      <a href="documents/timemanagement/TimerTest.java" target="_">Timer example</a>
+    </p>
+
+  <footer>
+    <script src="footer.js"></script>
+  </footer>
+  </body>
+</html>
