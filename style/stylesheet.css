@@ -76,6 +76,10 @@ code {
   font-size: larger;
 }
 
+.danger {
+  color: red;
+}
+
 p {
   margin-left: 6%;
   margin-right: 5%;
