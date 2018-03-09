@@ -16,6 +16,11 @@ function updateTime() {
         return piDay();
     }
 
+    //bad daylight savings hack
+    if(date < new Date(2018, 2, 11).getTime()) {
+        remainingMs += 3600000;
+    }
+
     var seconds = Math.floor(remainingMs / 1000);
     var minutes = Math.floor(seconds / 60);
     var hours = Math.floor(minutes / 60);
