@@ -31,6 +31,9 @@ function updateTime() {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     hours = hours % 24;
     hours = hours < 10 ? '0' + hours : hours;
+
+    var dayString = days > 1 ? days + ' days, ' : ( days > 0 ? days + ' day and ' : '' );
+
     countdownHeader.innerText = days + ' days, ' + hours + ':' + minutes + ':' + seconds + ' until Pi day!!!';
 }
 
