@@ -34,7 +34,7 @@ function updateTime() {
 
     var dayString = days > 1 ? days + ' days, ' : ( days > 0 ? days + ' day and ' : '' );
 
-    countdownHeader.innerText = days + ' days, ' + hours + ':' + minutes + ':' + seconds + ' until Pi day!!!';
+    countdownHeader.innerText = days + ' days, ' + hours + ':' + minutes + ':' + seconds;
 }
 
 updateTime();
