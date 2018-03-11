@@ -3,14 +3,71 @@
 var countdownHeader = document.getElementById('countdown');
 var canvas = document.getElementById('canvas');
 var slider = document.getElementById('slider');
+var spinBox = document.getElementById('spinBox');
+var vertexCounter = document.getElementById('vertexCounter');
+var estimate = document.getElementById('estimate');
+var percentError = document.getElementById('percentError');
 
 var piDay = new Date(2018, 2, 14, 0, 0, 0).getTime();
 
-function piDayDraw() {
+function sliderChanged() {
+    var vertexCount = slider.value;
+    spinBox.value = vertexCount;
+    piDayDraw(vertexCount);
+}
+
+function spinBoxChanged() {
+    var vertexCount = spinBox.value;
+    slider.value = vertexCount;
+    piDayDraw(vertexCount);
+}
+
+function piDayDraw(n) {
     //countdownHeader.innerText = '';
     var ctx = canvas.getContext('2d');
+    ctx.canvas.width = window.innerWidth * 0.8;
+    ctx.canvas.height = window.innerHeight * 0.7;
+    canvas.style = 'border: 1px solid lightgrey;';
 
-    ctx.fillRect(10, 10, 10, 10);
+    var midX = Math.floor(ctx.canvas.width / 2);
+    var midY = Math.floor(ctx.canvas.height / 2);
+    var radius = midY / 2 - 10;
+
+    var vertexCount = n || slider.value;
+
+    ctx.font = '30px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Circle circumference:', midX, midY - radius - 55);
+    ctx.fillText(2 * Math.PI, midX, midY - radius - 25);
+
+    ctx.beginPath();
+    ctx.arc(midX, midY, radius, 0, Math.PI * 2, true);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+    //no visible difference when over 50
+    var displayVertexCount = vertexCount > 50 ? 50 : vertexCount;
+    var length = Math.PI * (2 / displayVertexCount);
+    var i = 0;
+    for(i; i < displayVertexCount; i++) {
+        ctx.beginPath();
+        ctx.arc(midX, midY, radius, i * length, (i + 1) * length, false);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    //var piEstimate = Math.sin(2 * Math.PI / vertexCount) * vertexCount;
+    var piEstimate = vertexCount * Math.sqrt(2 - 2 * Math.cos(2 * Math.PI / vertexCount)) / 2;
+    if(piEstimate === 0) {
+        estimate.innerText = 'Overflow!! Enter a smaller number.';
+        return;
+    }
+
+    ctx.fillText('Polygon perimeter:', midX, midY + radius + 25);
+    ctx.fillText(2 * piEstimate, midX, midY + radius + 55);
+
+    estimate.innerText = 'π ≈ ' + piEstimate;
+    percentError.innerText = (Math.abs(piEstimate - Math.PI) / piEstimate * 100).toFixed(10) + '% error.';
 }
 
 function updateTime() {

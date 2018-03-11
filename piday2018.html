@@ -6,10 +6,16 @@
   <body style="text-align: center">
     <h1>Pi Day -- 3/14/2018</h1>
     <h1 id="countdown"></h1>
-    <h1>π</h1>
+    <h1 id="estimate">π</h1>
+    <h1 id="percentError"></h1>
     <label>Number of vertices:</label>
-    <input type="range" start="3" end="100" step="1" onchange="piDayDraw()" id="slider"/>
-    <canvas id="canvas"></canvas>
+    <input type="range" start="3" min="3" max="100" step="1" onchange="sliderChanged()" id="slider"/>
+    <label id="vertexCounter"></label>
+    <input type="number" min="3" onchange="spinBoxChanged()" id="spinBox"/>
+    <br>
+    <canvas id="canvas">
+      Your browser doesn't support this page :(
+    </canvas>
     <script src="piday2018.js"></script>
   </body>
 </html>
