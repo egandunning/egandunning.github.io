@@ -1,11 +1,16 @@
 "use strict";
 
 var countdownHeader = document.getElementById('countdown');
+var canvas = document.getElementById('canvas');
+var slider = document.getElementById('slider');
 
 var piDay = new Date(2018, 2, 14, 0, 0, 0).getTime();
 
-function piDay() {
-    countdownHeader.innerText = '';
+function piDayDraw() {
+    //countdownHeader.innerText = '';
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillRect(10, 10, 10, 10);
 }
 
 function updateTime() {
@@ -13,7 +18,7 @@ function updateTime() {
     var remainingMs = piDay - date;
 
     if(remainingMs <= 0) {
-        return piDay();
+        return false;
     }
 
     //bad daylight savings hack
@@ -35,10 +40,14 @@ function updateTime() {
     var dayString = days > 1 ? days + ' days, ' : ( days > 0 ? days + ' day and ' : '' );
 
     countdownHeader.innerText = days + ' days, ' + hours + ':' + minutes + ':' + seconds;
+    return true;
 }
 
-updateTime();
-
-window.setInterval(function() {
-    updateTime();
-}, 1000);
+//show countdown timer if pi day hasn't passed yet
+if(updateTime()) {
+    window.setInterval(function() {
+        updateTime();
+    }, 1000);
+} else {
+    piDayDraw();
+}
