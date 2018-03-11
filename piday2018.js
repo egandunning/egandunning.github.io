@@ -23,7 +23,7 @@ function spinBoxChanged() {
 }
 
 function piDayDraw(n) {
-    //countdownHeader.innerText = '';
+    countdownHeader.innerText = 'Estimate Pi Geometrically';
     var ctx = canvas.getContext('2d');
     ctx.canvas.width = window.innerWidth * 0.8;
     ctx.canvas.height = window.innerHeight * 0.7;
@@ -101,10 +101,10 @@ function updateTime() {
 }
 
 //show countdown timer if pi day hasn't passed yet
-if(updateTime()) {
-    window.setInterval(function() {
-        updateTime();
-    }, 1000);
-} else {
-    piDayDraw();
-}
+
+var timer = window.setInterval(function() {
+    if(!updateTime()) {
+        piDayDraw();
+        clearInterval(timer);
+    }
+}, 1000);
