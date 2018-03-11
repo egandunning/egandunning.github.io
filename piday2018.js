@@ -4,7 +4,7 @@ var countdownHeader = document.getElementById('countdown');
 var canvas = document.getElementById('canvas');
 var slider = document.getElementById('slider');
 var spinBox = document.getElementById('spinBox');
-var vertexCounter = document.getElementById('vertexCounter');
+var verticesLabel = document.getElementById('verticesLabel');
 var estimate = document.getElementById('estimate');
 var percentError = document.getElementById('percentError');
 
@@ -66,7 +66,7 @@ function piDayDraw(n) {
     ctx.fillText('Polygon perimeter:', midX, midY + radius + 25);
     ctx.fillText(2 * piEstimate, midX, midY + radius + 55);
 
-    estimate.innerText = 'π ≈ ' + piEstimate;
+    estimate.innerText = 'π ≈ ' + piEstimate.toFixed(15);
     percentError.innerText = (Math.abs(piEstimate - Math.PI) / piEstimate * 100).toFixed(10) + '% error.';
 }
 
@@ -102,9 +102,19 @@ function updateTime() {
 
 //show countdown timer if pi day hasn't passed yet
 
+slider.style.visibility = 'hidden';
+spinBox.style.visibility = 'hidden';
+verticesLabel.style.visibility = 'hidden';
+
+updateTime();
 var timer = window.setInterval(function() {
     if(!updateTime()) {
-        piDayDraw();
+        slider.style.visibility = 'visible';
+        spinBox.style.visibility = 'visible';
+        verticesLabel.style.visibility = 'hidden';
+        slider.value = 3;
+        spinBox.value = 3;
+        piDayDraw(3);
         clearInterval(timer);
     }
 }, 1000);
