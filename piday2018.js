@@ -6,6 +6,7 @@ var slider = document.getElementById('slider');
 var spinBox = document.getElementById('spinBox');
 var verticesLabel = document.getElementById('verticesLabel');
 var estimate = document.getElementById('estimate');
+var text = document.getElementById('text');
 var percentError = document.getElementById('percentError');
 
 var piDay = new Date(2018, 2, 14, 0, 0, 0).getTime();
@@ -111,7 +112,8 @@ var timer = window.setInterval(function() {
     if(!updateTime()) {
         slider.style.visibility = 'visible';
         spinBox.style.visibility = 'visible';
-        verticesLabel.style.visibility = 'hidden';
+        verticesLabel.style.visibility = 'visible';
+        text.style.visibility = 'visible';
         slider.value = 3;
         spinBox.value = 3;
         piDayDraw(3);

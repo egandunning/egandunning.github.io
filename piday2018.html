@@ -15,6 +15,96 @@
     <canvas id="canvas">
       Your browser doesn't support this page :(
     </canvas>
+    <div id="text" style="width:50em; visibility:hidden; text-align:left; margin:auto">
+      <h3>Explanation</h3>
+      <p>
+        On this page, you can approximate the value of pi using regular
+        polygons. Adjust the polygon's number of sides with the slider,
+        or enter a number into the text box.
+      </p>
+      <p>
+        We can approximate the circumference of a circle by drawing a polygon
+        inside the circle, then measure the perimeter of the polygon.
+      </p>
+
+      <h3>Practical use</h3>
+      <p>
+        Suppose you are stranded on a desert island and you need to finish your
+        trigonometry homework. The last question on your homework assignment
+        is: <em>Convert 21.742 degrees to radians.</em> But a cocunut fell on
+        your head, and you forgot every single digit of pi!!! All you have is a
+        straightedge, a blank notebook, and a pencil. How can you finish your
+        homework in time for class tomorrow??? 
+      </p>
+      <p>
+        You think quicky, and remember that pi is the ratio of a circle's
+        diameter to it's circumference, and draw a circle with a radius of 1
+        inch. Inside the circle, you draw a regular 100,000 sided polygon so
+        that the circle passes through every vertex of the polygon. Then you
+        measure one of the sides of the polygon and multiply that by 100,000 to
+        compute the perimeter of the polygon. Now you have a pretty good
+        estimate of the circumference of the circle (6.283185363507899 inches,
+        to be exact). You divide by two and get 3.141592681753949, a pretty
+        decent estimate for pi.
+      </p>
+      <p>
+        With your estimate for pi, you can now convert the degree value to
+        radians, using the formula: <em>180 / π = 21.742 / r</em>. You do a
+        little bit of algebra and do the calculation in your head: 
+        <em>r = 3.141592681753949 × 21.742 / 180 = 0.37946948937</em>.
+        Congrats! You finished your homework and you still have plenty of time
+        to build a signal fire to alert the search party!
+      </p>
+      <h3>Limitations</h3>
+      <p>
+        This isn't a good way to estimate pi. In fact, for this webpage, I used
+        JavaScript's built in pi constant to compute the polygon side lengths!
+        I created this page to make a fun visualization with an educational spin.
+      </p>
+      <p>
+        You may notice that accuracy actually goes down if you increase the
+        vertex count high enough. In theory this pi estimation should converge
+        at π if we made the vertex count arbitrarily large. However, floating
+        point numbers are not precise enough for this type of calculation. 
+        Small inaccuracies in floating point numbers can result in larger
+        problems. For example, if you use a polygon with 596313653 sides, the
+        error will be 29%, giving us a less accurate estimation than
+        a triangle!
+      </p>
+      <p>
+        To calculate the polygon side length, I used the <a href="https://en.wikipedia.org/wiki/Law_of_cosines">Law of Cosines</a>.
+        To visualize, draw lines from the center of the circle to each vertex.
+        This splits the polygon into triangles. From here, we can calculate
+        1 <em>n</em>th of the <em>n</em>-gon's perimeter by using the Law of
+        cosines. Since units don't matter here, assume the radius of the circle
+        is 1 unit. This simplifies our caluclation to <br><em>l^2 = 2 - 2 cos(2π / n)</em>.<br>
+        Multiply <em>l</em> by <em>n</em> to get the perimeter of the <em>n</em>-gon,
+        which is an estimate for the circumference of the unit circle, which is
+        2π. Divide the perimeter by 2 for the final estimate for pi.
+      </p>
+      <p>
+        The perimeter calculation involves dividing by <em>n</em>. If <em>n</em>
+        is large enough, the result of this calcluation can be truncated to 0.
+        For example, if we use a <em>596313653</em>-gon, we will have to do the
+        computation: <br><code>Math.cos((2 * Math.PI) / 596313653) = 0.9999999999999999</code>.<br>
+        But if we try with a polygon with just one more side, we get the
+        following: <br><code>Math.cos((2 * Math.PI) / 596313654) = 1</code>.<br> This completely
+        messes up our calculation of the polygon's perimeter, we end up with
+        <em>P = n × sqrt(2 - 2) = 0</em>, giving us the wildly inaccurate estimate
+        of <em>π = 0</em>.
+      </p>
+      <p>
+        For more info, see: <a href="https://en.wikipedia.org/wiki/IEEE_754">floating point standard</a>
+        and <a href="https://www.w3schools.com/js/js_numbers.asp">JavaScript numbers</a>.
+      </p>
+      <h3>Conclusion</h3>
+      <p>
+        I had a lot of fun making this mini-site, and I hope you enjoyed
+        visiting! Keep an eye out for more fun next year! All the
+        calculations are done in JavaScript, and I 
+        made the circle diagram with JavaScript's canvas API.
+      </p>
+    </div>
     <script src="piday2018.js"></script>
   </body>
 </html>
