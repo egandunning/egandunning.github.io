@@ -11,6 +11,19 @@ var percentError = document.getElementById('percentError');
 
 var piDay = new Date(2018, 2, 14, 0, 0, 0).getTime();
 
+function showPiDayStuff(show) {
+    if(show) {
+        slider.style.visibility = 'visible';
+        spinBox.style.visibility = 'visible';
+        verticesLabel.style.visibility = 'visible';
+        text.style.visibility = 'visible';
+        slider.value = 3;
+        spinBox.value = 3;
+    } else {
+
+    }
+}
+
 function sliderChanged() {
     var vertexCount = slider.value;
     spinBox.value = vertexCount;
@@ -97,25 +110,16 @@ function updateTime() {
 
     var dayString = days > 1 ? days + ' days, ' : ( days > 0 ? days + ' day and ' : '' );
 
-    countdownHeader.innerText = days + ' days, ' + hours + ':' + minutes + ':' + seconds;
+    countdownHeader.innerText = dayString + hours + ':' + minutes + ':' + seconds;
     return true;
 }
 
 //show countdown timer if pi day hasn't passed yet
 
-slider.style.visibility = 'hidden';
-spinBox.style.visibility = 'hidden';
-verticesLabel.style.visibility = 'hidden';
-
 updateTime();
 var timer = window.setInterval(function() {
     if(!updateTime()) {
-        slider.style.visibility = 'visible';
-        spinBox.style.visibility = 'visible';
-        verticesLabel.style.visibility = 'visible';
-        text.style.visibility = 'visible';
-        slider.value = 3;
-        spinBox.value = 3;
+        
         piDayDraw(3);
         clearInterval(timer);
     }
