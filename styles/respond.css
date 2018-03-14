@@ -1,0 +1,23 @@
+p, h3 {
+    width: 50em;
+    margin: auto;
+}
+
+@media only screen and (max-width: 1000px) {
+    body {
+        font-size: 1.5em;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    div.text {
+        width: 95%;
+        margin: auto;
+    }
+
+    p {
+        width: 100%;
+    }
+}

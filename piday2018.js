@@ -16,7 +16,7 @@ function showPiDayStuff(show) {
         slider.style.visibility = 'visible';
         spinBox.style.visibility = 'visible';
         verticesLabel.style.visibility = 'visible';
-        text.style = 'width:50em; text-align:left; margin:auto';
+        text.style = 'text-align:left; margin:auto';
         slider.value = 3;
         spinBox.value = 3;
     } else {
