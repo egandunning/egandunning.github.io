@@ -16,7 +16,7 @@ function showPiDayStuff(show) {
         slider.style.visibility = 'visible';
         spinBox.style.visibility = 'visible';
         verticesLabel.style.visibility = 'visible';
-        text.style.visibility = 'visible';
+        text.style = 'width:50em; text-align:left; margin:auto';
         slider.value = 3;
         spinBox.value = 3;
     } else {
@@ -119,7 +119,7 @@ function updateTime() {
 updateTime();
 var timer = window.setInterval(function() {
     if(!updateTime()) {
-        
+        showPiDayStuff(true);
         piDayDraw(3);
         clearInterval(timer);
     }
