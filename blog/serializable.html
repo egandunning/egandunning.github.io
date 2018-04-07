@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
+    <title>Egan Dunning</title>
+</head>
+<body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>Serializable Java Classes</h2>
+    <p>
+      In this post, I will explain object
+      serialization in Java. Don't know what that means? Great! Keep reading!
+    </p>
+    <h4>Simple data persistence</h4>
+    <p>
+      There are lots of situations where you want the data in your program to
+      persist after the program ends. All of the objects and variables in
+      your program are stored in memory while the program is running. When your
+      program stops running, that memory is freed so that other programs can
+      use it, and all of your objects are gone forever! So we need a way to
+      write the objects to disk while we can still access them (during program
+      execution).
+    </p>
+    <p>
+      One option would be to use a database, such as MySQL or SQLite. Databases
+      are great for storing information, but we would need to install the
+      database software, create the tables (unless you're using MongoDB), and
+      write queries to access the data. If you just need to store something
+      simple, using a database can be overkill, and it would be more trouble
+      than it's worth.
+    </p>
+    <p>
+      Another option would be to override the <code>toString</code> method,
+      so that you can write a string representation of the object to a text
+      file. This makes saving the file really easy!
+    </p>
+    <p>
+      But reading in the file and creating an object with its contents isn't
+      as simple. One solution would be to read the text file line by line
+      with a <code>Scanner</code>, then call the constructor with the data you
+      find. But now, every time you add fields to your class, you will need to
+      update the code that reads data from the text file.
+    </p>
+    <p>
+      There is a better way - implement the <code>Serializable</code> interface
+      in the class of the object you want to store. <code>Serializable</code>
+      is a marker interface, meaning that it has no methods. Its purpose is to
+      "mark" the class as something that can be serialized. To "serialize"
+      means to represent the object as a stream of bytes. So, now we can
+      serialize the object, then write those bytes to a file. When we need to
+      access the object again, we just need to read in the file, then
+      de-serialize the object.
+    </p>
+    <p>
+      Java provides the <code>ObjectOutputStream</code> and
+      <code>ObjectInputStream</code> classes to serialize and de-serialize
+      objects. These classes have a <code>writeObject</code> and a
+      <code>readObject</code> method, respectively.
+    </p>
+    <p>
+      To write an object to a file called <code>object.obj</code> (the file
+      extension can be anything you want), use the following pattern:
+    </p>
+
+    <div class="code">
+      <label>Java</label>
+      <code>
+        import java.io.ObjectOutputStream;<br>
+        import java.io.FileOutputStream;<br>
+        import java.io.File;<br>
+
+        public class Write {<br>
+        &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;MyObject myObject = new MyObject("Walt");<br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;System.out.print("Object to save: " + myObject.getName());<br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;FileOutputStream fs = new FileOutputStream(new File("object.obj"));<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;ObjectOutputStream os = new ObjectOutputStream(fs);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;os.writeObject(myObject);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;os.close();<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+    </div>
+
+    <p>
+      The code for reading an object from a file looks very similar: 
+    </p>
+
+    <div class="code">
+      <label>Java</label>
+      <code>
+        import java.io.ObjectInputStream;<br>
+        import java.io.FileInputStream;<br>
+        import java.io.File;<br>
+
+        public class Read {<br>
+        &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;FileInputStream fs = new FileInputStream(new File("object.obj"));<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;ObjectInputStream os = new ObjectInputStream(fs);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;MyObject myObject = (MyObject)os.readObject();<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;os.close();<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Object read from file: " + myObject.getName());<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+    </div>
+
+    <p>
+      Of course, in a real program, you will want to handle exceptions, instead
+      of just declaring <code>throws Exception</code> on the main method. The
+      best way to handle exceptions is to use a try-with-resources block, which
+      will always close the resource being used (an
+      <code>ObjectOutputStream</code> for example). This simplifies your code,
+      and ensures no resources are leaked.
+    </p>
+    
+    <h4>Conclusion</h4>
+    <p>
+      Serializing an object in Java allows us to store a representation of that
+      object in a file, or send the object over a network. It allows for simple
+      persistent storage of Java objects.
+    </p>
+    <p>
+      Object serialization isn't meant to solve all data persistence problems.
+      Issues will arise if multiple threads need to access the same file
+      storing an object, and keeping track of many files can be difficult. In
+      cases like these, a database would be a more appropriate solution. Also,
+      reading serialized objects is easy in Java, but what if you need to
+      send objects to a server that isn't written in Java? In this situation,
+      storing the Java object in JSON, then sending the JSON data would make
+      more sense. Many programming languages support JSON, so it is a great
+      format to use when communicating with servers.
+    </p>
+    
+    <h3>Runnable Example:</h3>
+    <ul>
+      <li>Includes MyObject.java, Read.java, readme.txt, Write.java</li>
+      <li><a href="../documents/serializeExampleCode.zip">Download now</a> (2KB)</li>
+    </ul>
+    <p>SHA256 sum: <code>
+      f9cc34301f1608e8cff6c6d1aef50d515ff97c1e348ff851dcced1d9423545f7</code>
+    </p>
+  </div>
+  <footer>
+    <script src="../footer.js"></script>
+  </footer>
+</body>
+</html>
