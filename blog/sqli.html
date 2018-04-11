@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
+    <title>Egan Dunning</title>
+</head>
+<body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>SQL Injection</h2>
+    <p>
+      Keeping data secure is very important. Any application that talks to a
+      database needs protection against SQL injection, an attack method where
+      an SQL query is entered into a form where text is expected. Luckily, this
+      attack is easy to prevent. As a software engineer/programmer, it is your
+      responsibility to keep your database secure against SQL injection (SQLi
+      for short).
+    </p>
+    <h4>Example with JDBC</h4>
+    <p>
+      The JDBC (Java Database Connectivity) library allows Java applications to
+      talk to databases. Here is a snippet for example:
+    </p>
+    <div class="code">
+      <label>Java</label>
+      <code>
+        ...<br>
+        String uname = //get username from user input<br>
+        String sql = "SELECT * FROM Users WHERE username='"+uname+"'";<br>
+			  Statement stmt = connection.createStatement();<br>
+			
+        ResultSet rs = stmt.executeQuery(sql);<br>
+        ...
+      </code>
+    </div>
+    
+    <p>
+      In the code above, we assume that the connection has been set up, and
+      that <code>uname</code> is provided by the user. This works just fine if
+      the user enters a real username.
+    </p>
+    <p>
+      But what if the user enters: <code>'; DROP TABLE USERS;</code> for their
+      username? Nothing good... let's try it out.
+    </p>
+
+    <h4>Follow along</h4>
+
+    <p>
+      For this exercise, we will use a lightweight database, SQLite.
+    </p>
+
+    <h3>Runnable Example:</h3>
+    <ul>
+      <li>Includes MyObject.java, Read.java, readme.txt, Write.java</li>
+      <li><a href="../documents/serializeExampleCode.zip">Download now</a> (2KB)</li>
+    </ul>
+    <p>SHA256 sum: <code>
+      f9cc34301f1608e8cff6c6d1aef50d515ff97c1e348ff851dcced1d9423545f7</code>
+    </p>
+  </div>
+  <footer>
+    <script src="../footer.js"></script>
+  </footer>
+</body>
+</html>
