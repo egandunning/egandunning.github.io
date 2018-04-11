@@ -47,10 +47,48 @@
       username? Nothing good... let's try it out.
     </p>
 
-    <h4>Follow along</h4>
+    <h3>Follow along</h3>
 
     <p>
-      For this exercise, we will use a lightweight database, SQLite.
+      For this exercise, we will use a lightweight database, SQLite. Before
+      downloading anything, check to see if SQLite is installed. SQLite is
+      included with most Linux distributions, and is probably available through
+      your distro's package manager. Type this into the terminal/command
+      prompt to check if SQLite is installed:
+    </p>
+    <p>
+      <code>sqlite3 --version</code>
+    </p>
+    <p>
+      If you are a Windows user, download the command-line tools from the
+      SQLite website:
+      <a href="http://sqlite.org/download.html">http://sqlite.org/download.html</a>
+      Next, you will need to extract the zip file containing
+      the SQLite executable files. On my machine, I extracted this file to
+      <code>C:\</code>, so I can find it easily. Now you need to tell
+      Windows where to find to find the SQLite command line tools, so add
+      the location of the extracted folder to your PATH. Now, you should be
+      able to manipulate SQLite databases from your command prompt.
+    </p>
+
+    <h4>Create a simple table</h4>
+    <p>
+      Using SQLite, lets make a basic table with two columns. You can add
+      more columns if you want, but I want to keep this example as simple as
+      possible.
+    </p>
+    <p>
+      <code>sqlite3 sqli</code><br>This opens the SQLite command line interface
+      and creates a new database called "sqli".
+    </p>
+    <p>
+      <code>create table users(id int, name varchar(20));</code><br>Creates a
+      table called "users" with two columns.
+    </p>
+    <p>
+      <code>insert into users values(1234, "jim");</code><br>
+      <code>insert into users values(4321, "sue");</code><br>Insert some dummy
+      data into the users table.
     </p>
 
     <h3>Runnable Example:</h3>
