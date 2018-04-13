@@ -75,9 +75,11 @@
     <p>
       Using SQLite, lets make a basic table with two columns. You can add
       more columns if you want, but I want to keep this example as simple as
-      possible.
+      possible. Create a new directory called "sqli-demo", then add a database
+      inside that directory.
     </p>
     <p>
+      <code>mkdir sqli-demo</code><br>
       <code>sqlite3 sqli</code><br>This opens the SQLite command line interface
       and creates a new database called "sqli".
     </p>
@@ -90,6 +92,36 @@
       <code>insert into users values(4321, "sue");</code><br>Insert some dummy
       data into the users table.
     </p>
+    <p>
+      <code>.quit</code><br>
+      Exit the SQLite command-line interface.
+    </p>
+
+    <h4>Interact with the database using Java</h4>
+    <p>
+      To demonstrate SQLi, we will need to write a program that takes user
+      input and interacts with the database using that input. Many real-world
+      programs that use a database would typically run on a web server and
+      get user input over the internet, but let's keep it simple and just
+      create a command-line application.
+    </p>
+    <p>
+      To run queries against an SQLite database, we need a JDBC driver written
+      specifically for SQLite. You can find the driver
+      <a href="https://github.com/xerial/sqlite-jdbc">here</a>, look for the
+      download link in the readme. Once you have the JDBC jar, copy the jar
+      into the "sqli-demo" directory.
+    </p>
+    <p>
+      Now, create a new Java file inside "sqli-demo". I named my Java file
+      "Insecure.java". Inside Insecure.java, write the following code:
+    </p>
+    <div class="code">
+      <label>java</label>
+      <code>
+        
+      </code>
+    </div>
 
     <h3>Runnable Example:</h3>
     <ul>
