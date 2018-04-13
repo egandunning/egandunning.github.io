@@ -47,11 +47,11 @@ div.code {
   position: relative;
   margin: 1em;
   padding: 1em;
-  border: 2px darkgrey;
+  border: 1px darkgrey;
   border-style: solid;
   border-radius: 1em;
-  margin-left: 6%;
-  margin-right: 5%;
+  margin-left: -1em;
+  margin-right: -1em;
 }
 
 .oneline {
@@ -65,8 +65,8 @@ div.code {
   text-align: right;
   color: darkgrey;
   padding: 0.5em;
-  margin: -2px;
-  border: 2px darkgrey;
+  margin: -1px;
+  border: 1px darkgrey;
   border-style: solid;
   border-top-right-radius: 1em;
   border-bottom-left-radius: 1em;
