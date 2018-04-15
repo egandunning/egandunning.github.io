@@ -117,11 +117,87 @@
       "Insecure.java". Inside Insecure.java, write the following code:
     </p>
     <div class="code">
-      <label>java</label>
+      <label>Java</label>
       <code>
-        
+        import java.sql.Connection;<br>
+        import java.sql.DriverManager;<br>
+        import java.sql.Statement;<br>
+        import java.util.Scanner;<br>
+        &nbsp;<br>
+        public class Insecure {<br>
+          &nbsp;<br>
+          &nbsp;&nbsp;private final static String URL = "jdbc:sqlite:sqli";<br>
+          &nbsp;<br>
+          &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
+            &nbsp;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connecting to DB...");<br>
+            &nbsp;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;try(Connection conn = DriverManager.getConnection(URL)) {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connected to DB.");<br>
+              &nbsp;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanner input = new Scanner(System.in);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter id:");<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String id = input.nextLine();<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter name:");<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String name = input.nextLine();<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input.close();<br>
+              &nbsp;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Statement stmt = conn.createStatement();<br>
+              &nbsp;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.executeUpdate("insert into users values(" + id +<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",'" + name + "')");<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+        }
       </code>
     </div>
+
+    <p>
+      The code above connects to the database we created earlier, then adds a
+      record to the users table. Be aware that any exception will crash the
+      program, this program is just meant to be a simple demonstration.
+    </p>
+    <p>
+      Note that the line <code>stmt.executeUpdate("insert...</code> directly
+      injects user input into a SQL statement.
+    </p>
+    <p>
+      At this point you should have the following files in your sqli-demo
+      directory:
+      <ul>
+        <li><code>Insecure.java</code></li>
+        <li><code>sqli</code> - This is the the database, SQLite stores
+        databases in flat files.</li>
+        <li><code>sqlite-jdbc-3.21.0.jar</code></li>
+      </ul>
+    </p>
+    <p>
+      To compile and run, use the following commands:
+    </p>
+    <p>
+      <code>javac -cp "sqlite-jdbc-3.21.0.jar" Insecure.java</code><br>
+      (Windows) <code>java -cp "sqlite-jdbc-3.21.0.jar;." Insecure</code><br>
+      (Mac/Linux) <code>java -cp "sqlite-jdbc-3.21.0.jar:." Insecure</code>
+    </p>
+    <p>
+      The <code>cp</code> option is short for "classpath". This option tells
+      Java where to find any external libraries neccessary for compilation and
+      execution.
+    </p>
+    <p>
+      Once the program is running, you will be prompted for an id and name that
+      will be stored in the user table.
+    </p>
+    <p>
+      For example, we can enter an id of <code>111</code> and the name<br>
+      <code>Frank'; drop table users; --</code><br>
+      Now, lets open up the database in the SQLite CLI and see if our changes
+      were made:
+    </p>
+    <p>
+      <code>sqlite3 sqli</code>
+      <code>select * from users</code>
+    </p>
 
     <h3>Runnable Example:</h3>
     <ul>
