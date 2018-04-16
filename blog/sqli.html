@@ -198,6 +198,11 @@
       <code>sqlite3 sqli</code>
       <code>select * from users</code>
     </p>
+    <p>
+      But as we can see, no records were returned, since we injected a
+      command to drop the users table! Lets look at the SQL statement that
+      got passed to the database:
+    </p>
 
     <h3>Runnable Example:</h3>
     <ul>
