@@ -190,19 +190,78 @@
     </p>
     <p>
       For example, we can enter an id of <code>111</code> and the name<br>
-      <code>Frank'; drop table users; --</code><br>
+      <code>Frank'); drop table users; --</code><br>
       Now, lets open up the database in the SQLite CLI and see if our changes
       were made:
     </p>
     <p>
-      <code>sqlite3 sqli</code>
-      <code>select * from users</code>
+      <code>sqlite3 sqli</code><br>
+      <code>select * from users;</code>
     </p>
     <p>
       But as we can see, no records were returned, since we injected a
       command to drop the users table! Lets look at the SQL statement that
       got passed to the database:
     </p>
+    <p>
+      <code>"insert into users values(111,'Frank'); drop table users; --')"</code>
+    </p>
+    <p>
+      As we can see, the program sends the database a command that inserts a
+      new record into the users table, then drops the users table, and then
+      comments out the remaining apostrophe and parenthesis.
+    </p>
+    <p>
+      This is a huge problem, because the program we wrote is only supposed
+      to insert a row into a table. But a user can inject arbitrary SQL
+      statements, and is free to alter and delete data.
+    </p>
+    <h3>Preventing SQL injection</h3>
+    <p>
+      Preventing SQLi is easy, so there is no excuse for SQLi vulnerable code.
+      In JDBC, the <code>PreparedStatement</code> class provides built in SQLi
+      protection.
+    </p>
+    <p>
+      Lets write a secure version of <code>Insecure.java</code>, using
+      <code>PreparedStatement</code>:
+    </p>
+    <div class="code">
+      <label>Java</label>
+      <code>
+        import java.sql.Connection;<br>
+        import java.sql.DriverManager;<br>
+        import java.sql.PreparedStatement;<br>
+        import java.util.Scanner;<br>
+        &nbsp;<br>
+        public class Insecure {<br>
+          &nbsp;<br>
+          &nbsp;&nbsp;private final static String URL = "jdbc:sqlite:sqli";<br>
+          &nbsp;<br>
+          &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
+            &nbsp;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connecting to DB...");<br>
+            &nbsp;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;try(Connection conn = DriverManager.getConnection(URL)) {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connected to DB.");<br>
+              &nbsp;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanner input = new Scanner(System.in);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter id:");<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int id = Integer.parseInt(input.nextLine());<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter name:");<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String name = input.nextLine();<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input.close();<br>
+              &nbsp;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PreparedStatement stmt = conn.prepareStatement("insert into users values(?,?)");<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.setInt(1, id);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.setString(2, name);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.executeUpdate();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                
+          &nbsp;&nbsp;}<br>
+        }
+      </code>
+    </div>
 
     <h3>Runnable Example:</h3>
     <ul>
