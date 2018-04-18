@@ -263,6 +263,15 @@
       </code>
     </div>
 
+    <p>
+      Notice that now we are using a <code>PreparedStatement</code> instead of
+      a <code>Statement</code>. <code>PreparedStatement</code>s can take
+      parameters, denoted by question marks. To bind a value to a question
+      mark, use one of the <code>setString</code>, <code>setInt</code>, etc.
+      methods. These methods take two parameters, the index of the question
+      mark (starting with 1) and the value to bind.
+    </p>
+
     <h3>Runnable Example:</h3>
     <ul>
       <li>Includes MyObject.java, Read.java, readme.txt, Write.java</li>
