@@ -191,7 +191,7 @@
     <p>
       For example, we can enter an id of <code>111</code> and the name<br>
       <code>Frank'); drop table users; --</code><br>
-      Now, lets open up the database in the SQLite CLI and see if our changes
+      Now, let's open up the database in the SQLite CLI and see if our changes
       were made:
     </p>
     <p>
@@ -271,7 +271,33 @@
       methods. These methods take two parameters, the index of the question
       mark (starting with 1) and the value to bind.
     </p>
-
+    <p>
+      Before we test this program, we need to recreate the users table, since
+      we dropped it earlier.
+    </p>
+    <p>
+      To compile and run, use the following commands:
+    </p>
+    <p>
+      <code>javac -cp "sqlite-jdbc-3.21.0.jar" Insecure.java</code><br>
+      (Windows) <code>java -cp "sqlite-jdbc-3.21.0.jar;." Insecure</code><br>
+      (Mac/Linux) <code>java -cp "sqlite-jdbc-3.21.0.jar:." Insecure</code>
+    </p>
+    <p>
+      Now let's try to inject some SQL: choose an id<br>
+      <code>111</code> and the name<br>
+      <code>Frank'); drop table users; --</code><br>
+    </p>
+    <p>
+      <code>sqlite3 sqli</code><br>
+      <code>select * from users;</code>
+    </p>
+    <p>
+      You should see a row with an id of <code>111</code> and the name
+      <code>Frank'); drop table users; --</code>. This is good! The
+      <code>PreparedStatement</code> didn't interpret our injected SQL as
+      a command, and we didn't lose any data.
+    </p>
     <h3>Runnable Example:</h3>
     <ul>
       <li>Includes MyObject.java, Read.java, readme.txt, Write.java</li>
