@@ -298,6 +298,13 @@
       <code>PreparedStatement</code> didn't interpret our injected SQL as
       a command, and we didn't lose any data.
     </p>
+    <p>
+      Whenever you access a database programmatically, always make sure all
+      input has been cleaned to avoid SQL injection. Most programming languages
+      and databases have libraries that will do this automatically, so it is up
+      to you, the developer to learn how to use these libraries and keep your
+      data safe.
+    </p>
     <h3>Runnable Example:</h3>
     <ul>
       <li>Includes MyObject.java, Read.java, readme.txt, Write.java</li>
