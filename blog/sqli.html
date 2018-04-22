@@ -21,35 +21,6 @@
     </p>
     <h4>Example with JDBC</h4>
     <p>
-      The JDBC (Java Database Connectivity) library allows Java applications to
-      talk to databases. Here is a snippet for example:
-    </p>
-    <div class="code">
-      <label>Java</label>
-      <code>
-        ...<br>
-        String uname = //get username from user input<br>
-        String sql = "SELECT * FROM Users WHERE username='"+uname+"'";<br>
-			  Statement stmt = connection.createStatement();<br>
-			
-        ResultSet rs = stmt.executeQuery(sql);<br>
-        ...
-      </code>
-    </div>
-    
-    <p>
-      In the code above, we assume that the connection has been set up, and
-      that <code>uname</code> is provided by the user. This works just fine if
-      the user enters a real username.
-    </p>
-    <p>
-      But what if the user enters: <code>'; DROP TABLE USERS;</code> for their
-      username? Nothing good... let's try it out.
-    </p>
-
-    <h3>Follow along</h3>
-
-    <p>
       For this exercise, we will use a lightweight database, SQLite. Before
       downloading anything, check to see if SQLite is installed. SQLite is
       included with most Linux distributions, and is probably available through
