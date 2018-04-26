@@ -96,8 +96,8 @@ def updateIndex():
    indexFile = open("projects.html", "r")
 
    #read at most a megabyte
-   indexContent = indexFile.read(1000000);
-   indexFile.close();
+   indexContent = indexFile.read(1000000)
+   indexFile.close()
 
    #get content before links
    beforeLinks = indexContent[0:indexContent.find("<ul>")+4]
