@@ -29,5 +29,6 @@ def prettify():
     for line in codeLines:
         print(tab + tab + line.replace('    ', '&nbsp&nbsp '))
     print(tab + '</code>')
+    print('</div>')
 
 prettify()
