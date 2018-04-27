@@ -79,10 +79,10 @@
   </p>
   <div class="code">
     <label>Java</label>
-    <code>
-      OutputStream os = serverSocket.getOutputStream();<br/>
+    <pre>
+      OutputStream os = serverSocket.getOutputStream();
       String message = "m300 -100";
-    </code>
+    </pre>
   </div> 
   <p>
     In order to send the message to the server, we need to write the message to
@@ -90,9 +90,9 @@
   </p>
   <div class="code">
     <label>Java</label>
-    <code>
+    <pre>
       os.write(message.getBytes());
-    </code>
+    </pre>
   </div>
   <p>
     Now the message has been sent to the server. The server has to recieve and
@@ -101,10 +101,10 @@
   </p>
   <div class="code">
     <label>Python</label>
-    <code>
-      while(True):<br/>
-      &nbsp;&nbsp;data = client_sock.recv(64)
-    </code>
+    <pre>
+      while(True):
+        data = client_sock.recv(64)
+    </pre>
   </div>
   <p>
     Here, <code>client_sock</code> is the client socket. The <code>recv(64)
@@ -121,10 +121,10 @@
   </p>
   <div class="code">
     <label>Python</label>
-    <code>
-      code = data[0]<br/>
+    <pre>
+      code = data[0]
       data = data[1:]
-    </code>
+    </pre>
   </div>
   <p>
     Now that the code character and the data are separate, we can handle
@@ -132,15 +132,18 @@
   </p>
   <div class="code">
     <label>Python</label>
-    <code>
-      if code == "m": #mouse movement<br/>
-      &nbsp;&nbsp;os.system("xdotool mousemove_relative -- %s" % data)<br/>
-      elif code == "1": #mouse1<br/>
-      &nbsp;&nbsp;os.system("xdotool click 1")<br/>
-      elif code == "2": #mouse2<br/>
-      &nbsp;&nbsp;os.system("xdotool click 2")<br/>
-      <br/>...
-    </code>
+    <pre>
+      if code == "m": #mouse movement
+        os.system("xdotool mousemove_relative -- %s" % data)
+
+      elif code == "1": #mouse1
+        os.system("xdotool click 1")
+
+      elif code == "2": #mouse2
+        os.system("xdotool click 2")
+      
+      ...
+    </pre>
   </div>
   <p>
     The data is sent directly to xdotool by using <code>os.system()</code>,
@@ -178,18 +181,22 @@
   </p>
   <div class="code">
     <label>Java</label>
-    <code>
-      public static String getXDoToolKey(KeyEvent event) {<br/>
-      &nbsp;&nbsp;int keyCode = event.getKeyCode();<br/>
-      &nbsp;&nbsp;switch(keyCode) {<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_DEL:<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "BackSpace";<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_PERIOD:<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "period";<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;case KeyEvent.KEYCODE_SEMICOLON:<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "semicolon";<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;...
-    </code>
+    <pre>
+      public static String getXDoToolKey(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+
+        switch(keyCode) {
+          case KeyEvent.KEYCODE_DEL:
+            return "BackSpace";
+
+          case KeyEvent.KEYCODE_PERIOD:
+            return "period";
+
+          case KeyEvent.KEYCODE_SEMICOLON:
+            return "semicolon";
+
+          ...
+      </pre>
   </div>
   <p>
     The <code>KeyEvent</code> class reports key events, and has static integer
@@ -206,22 +213,23 @@
   </p>
   <div class="code">
     <label>Java</label>
-    <code>
-      @Override<br/>
-      public boolean onKeyUp(int keyCode, KeyEvent event) {<br/>
-      &nbsp;&nbsp;if(keyCode != KeyEvent.KEYCODE_BACK) {<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;sendKey(KeyCodeTranslator.getXDoToolKey(event));<br/>
-      &nbsp;&nbsp;}<br/>
-      &nbsp;&nbsp;return super.onKeyUp(keyCode, event);<br/>
-      }<br/><br/>
-      private void sendKey(String keys) {<br/>
-      &nbsp;&nbsp;try {<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;serverSocket.getOutputStream().write(("p"+keys).getBytes());<br/>
-      &nbsp;&nbsp;} catch(IOException e) {<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();<br/>
-      &nbsp;&nbsp;}<br/>
+    <pre>
+      @Override
+      public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode != KeyEvent.KEYCODE_BACK) {
+          sendKey(KeyCodeTranslator.getXDoToolKey(event));
+        }
+        return super.onKeyUp(keyCode, event);
       }
-    </code>
+
+      private void sendKey(String keys) {
+        try {
+          serverSocket.getOutputStream().write(("p"+keys).getBytes());
+        } catch(IOException e) {
+          e.printStackTrace();
+        }
+      }
+    </pre>
   </div>
   <p>
     In the <code>onKeyUp</code> action listener, ignore the back button, since
@@ -244,12 +252,13 @@
   
   <div class="code">
     <label>Python</label>
-    <code>
-    while(connect_recv_loop()):<br/>
-    &nbsp;&nbsp;print "connection closed"<br/><br/>
-    print "exiting"<br/>
-    #end of file
-    </code>
+    <pre>
+      while(connect_recv_loop()):
+        print "connection closed"
+      
+      print "exiting"
+      #end of file
+    </pre>
   </div>
   
   <p>
@@ -261,12 +270,12 @@
   
   <div class="code">
     <label>Python</label>
-    <code>
-    ...<br/>
-    elif code == "c": #close connection<br/>
-	&nbsp;&nbsp;close_resources()<br/>
-	&nbsp;&nbsp;return True<br/>
-    </code>
+    <pre>
+      ...
+      elif code == "c": #close connection
+	      close_resources()
+	      return True
+    </pre>
   </div>
   
   <p>
@@ -281,12 +290,12 @@
   
   <div class="code">
     <label>Python</label>
-    <code>
-      elif code == "s": #shutdown<br/>
-      &nbsp;&nbsp;os.system("sleep 1 &amp;&amp; sudo shutdown -h now")<br/>
-      &nbsp;&nbsp;close_resources()</br>
-      &nbsp;&nbsp;return False
-    </code>
+    <pre>
+      elif code == "s": #shutdown
+        os.system("sleep 1 && sudo shutdown -h now")
+        close_resources()
+        return False
+    </pre>
   </div>
   
   <p>
@@ -309,13 +318,13 @@
     file bluemouse.desktop. Here are the contents of bluemouse.desktop:
   </p>
   <div class="code">
-    <code>
-      [Desktop Entry]<br/>
-      Type=Application<br/>
-      Name=bluemouse autostart<br/>
-      Comment=start bluemouse server<br/>
-      Exec=/home/pi/Desktop/server.py<br/>
-    </code>
+    <pre>
+      [Desktop Entry]
+      Type=Application
+      Name=bluemouse autostart
+      Comment=start bluemouse server
+      Exec=/home/pi/Desktop/server.py
+    </pre>
   </div>
   <p>
     This only works if both server.py and bluemouse.desktop have executable

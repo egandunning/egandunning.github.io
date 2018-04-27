@@ -89,38 +89,37 @@
     </p>
     <div class="code">
       <label>Java</label>
-      <code>
-        import java.sql.Connection;<br>
-        import java.sql.DriverManager;<br>
-        import java.sql.Statement;<br>
-        import java.util.Scanner;<br>
-        &nbsp;<br>
-        public class Insecure {<br>
-          &nbsp;<br>
-          &nbsp;&nbsp;private final static String URL = "jdbc:sqlite:sqli";<br>
-          &nbsp;<br>
-          &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
-            &nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connecting to DB...");<br>
-            &nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;try(Connection conn = DriverManager.getConnection(URL)) {<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connected to DB.");<br>
-              &nbsp;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanner input = new Scanner(System.in);<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter id:");<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String id = input.nextLine();<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter name:");<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String name = input.nextLine();<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input.close();<br>
-              &nbsp;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Statement stmt = conn.createStatement();<br>
-              &nbsp;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.executeUpdate("insert into users values(" + id +<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",'" + name + "')");<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-          &nbsp;&nbsp;}<br>
+      <pre>
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.Statement;
+        import java.util.Scanner;
+        
+        public class Insecure {
+          
+          private final static String URL = "jdbc:sqlite:sqli";
+          public static void main(String[] args) throws Exception {
+            
+            System.out.println("Connecting to DB...");
+            
+            try(Connection conn = DriverManager.getConnection(URL)) {
+              System.out.println("Connected to DB.");
+              
+              Scanner input = new Scanner(System.in);
+              System.out.println("Enter id:");
+              String id = input.nextLine();
+              System.out.println("Enter name:");
+              String name = input.nextLine();
+              input.close();
+              
+              Statement stmt = conn.createStatement();
+              
+              stmt.executeUpdate("insert into users values(" + id +
+                ",'" + name + "')");
+            }
+          }
         }
-      </code>
+      </pre>
     </div>
 
     <p>
@@ -199,39 +198,40 @@
     </p>
     <div class="code">
       <label>Java</label>
-      <code>
-        import java.sql.Connection;<br>
-        import java.sql.DriverManager;<br>
-        import java.sql.PreparedStatement;<br>
-        import java.util.Scanner;<br>
-        &nbsp;<br>
-        public class Insecure {<br>
-          &nbsp;<br>
-          &nbsp;&nbsp;private final static String URL = "jdbc:sqlite:sqli";<br>
-          &nbsp;<br>
-          &nbsp;&nbsp;public static void main(String[] args) throws Exception {<br>
-            &nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connecting to DB...");<br>
-            &nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;try(Connection conn = DriverManager.getConnection(URL)) {<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Connected to DB.");<br>
-              &nbsp;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanner input = new Scanner(System.in);<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter id:");<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int id = Integer.parseInt(input.nextLine());<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Enter name:");<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String name = input.nextLine();<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input.close();<br>
-              &nbsp;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PreparedStatement stmt = conn.prepareStatement("insert into users values(?,?)");<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.setInt(1, id);<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.setString(2, name);<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stmt.executeUpdate();<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+      <pre>
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.PreparedStatement;
+        import java.util.Scanner;
+        
+        public class Insecure {
+          
+          private final static String URL = "jdbc:sqlite:sqli";
+          
+          public static void main(String[] args) throws Exception {
+            
+            System.out.println("Connecting to DB...");
+            
+            try(Connection conn = DriverManager.getConnection(URL)) {
+              System.out.println("Connected to DB.");
+              
+              Scanner input = new Scanner(System.in);
+              System.out.println("Enter id:");
+              int id = Integer.parseInt(input.nextLine());
+              System.out.println("Enter name:");
+              String name = input.nextLine();
+              input.close();
+              
+              PreparedStatement stmt = conn.prepareStatement(
+                "insert into users values(?,?)");
+              stmt.setInt(1, id);
+              stmt.setString(2, name);
+              stmt.executeUpdate();
+            }
                 
-          &nbsp;&nbsp;}<br>
+          }
         }
-      </code>
+      </pre>
     </div>
 
     <p>

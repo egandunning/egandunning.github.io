@@ -21,6 +21,7 @@
       For more info about FXML, read
       <a target="_blank" href="https://docs.oracle.com/javase/8/javafx/fxml-tutorial/why_use_fxml.htm">
         Oracle's documentation</a>.
+    </p>
     <p>
       In the root tag of an FXML file, specify the fully-qualified (include 
       the package name) Java class to use as a controller with the
@@ -28,11 +29,11 @@
     </p>
     <div class="code">
       <label>FXML</label>
-      <code>
-        &lt;AnchorPane<br>
-        &nbsp;&nbsp;fx:controller="controllers.MainController"<br>
-        &nbsp;&nbsp;xmlns:fx="http://javafx.com/fxml/1">...
-      </code>
+      <pre>
+        &lt;AnchorPane
+          fx:controller="controllers.MainController"
+          xmlns:fx="http://javafx.com/fxml/1">...
+      </pre>
     </div>
 
 
@@ -54,19 +55,19 @@
     <p>mainwindow.fxml</p>
     <div class="code">
       <label>FXML</label>
-      <code>
-        &lt;TabPane fx:id="tabPane"><br>
-        &nbsp;&nbsp;&lt;Tab fx:id="introTab" text="Welcome"><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&lt;fx:include source="intro_page.fxml"/><br>
-        &nbsp;&nbsp;&lt;/Tab>...
-      </code>
+      <pre>
+        &lt;TabPane fx:id="tabPane">
+          &lt;Tab fx:id="introTab" text="Welcome">
+            &lt;fx:include source="intro_page.fxml"/>
+          &lt;/Tab>...
+      </pre>
     </div>
     <p>introTab.fxml</p>
     <div class="code">
       <label>FXML</label>
-      <code>
+      <pre>
         &lt;GridPane fx:controller="controllers.InfoTab">
-      </code>
+      </pre>
     </div>
 
     <p>
@@ -78,7 +79,7 @@
       making code easier to read by splitting a potentially large controller
       class into smaller, more manageable files.
     </p>
-    
+  </div>
   <footer>
     <script src="../footer.js"></script>
   </footer>

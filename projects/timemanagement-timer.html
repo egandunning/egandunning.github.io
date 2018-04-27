@@ -27,15 +27,16 @@
     </p>
       <div class="code">
         <label>Java</label>
-        <code>
-          Timer myTimer = new Timer();<br>
-          myTimer.schedule(new TimerTask(){<br>
-          &nbsp;&nbsp;@Override<br>
-          &nbsp;&nbsp;public void run() {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("hello world");<br>
-          &nbsp;&nbsp;}<br>
+        <pre>
+          Timer myTimer = new Timer();
+          myTimer.schedule(new TimerTask(){
+
+            @Override
+            public void run() {
+              System.out.println("hello world");
+            }
           }, 10000);
-        </code>
+        </pre>
       </div>
     <p>
       The above code creates an instance of the <code>Timer</code> class, which
@@ -54,11 +55,11 @@
     </p>
     <div class="code">
       <label>Java</label>
-      <code>
-        ...<br>
-        Timer myTimer = new Timer();<br>
+      <pre>
+        ...
+        Timer myTimer = new Timer();
         myTimer.scheduleAtFixedRate(myTimerTask, 0, 10000);
-      </code>
+      </pre>
     </div>
     <p>
       This code creates a timer that executes a task immediately, and executes
@@ -124,9 +125,9 @@
     </p>
     <div class="code">
       <label>Java</label>
-      <code>
+      <pre>
         Platform.runLater(() -> myTextField.setPromptText("Hi!"));
-      </code>
+      </pre>
     </div>
     <p>
       No more exceptions! Yay! When I was working on this program, I only
@@ -145,11 +146,11 @@
     </p>
     <div class="code">
       <label>Java</label>
-      <code>
-        AudioClip myClip = new AudioClip(getClass().getClassloader()<br>
-        &nbsp;&nbsp;.getResource("Bell.mp3").toString());<br>
+      <pre>
+        AudioClip myClip = new AudioClip(getClass().getClassloader()
+          .getResource("Bell.mp3").toString());
         myClip.play();
-      </code>
+      </pre>
     </div>
     <p>
       In the example, we need to have a file called "Bell.mp3" on the classpath
@@ -162,7 +163,7 @@
     <p>
       <a href="../documents/timemanagement/TimerTest.java" target="_">Timer example</a>
     </p>
-
+  </div>
   <footer>
     <script src="../footer.js"></script>
   </footer>
