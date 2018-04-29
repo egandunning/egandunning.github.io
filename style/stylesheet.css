@@ -46,7 +46,7 @@ div.pic {
 div.code {
   position: relative;
   margin: 1em;
-  padding: 1em;
+  padding: 1em 0em;
   border: 1px darkgrey;
   border-style: solid;
   border-radius: 1em;
