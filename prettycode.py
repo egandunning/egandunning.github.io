@@ -1,5 +1,5 @@
 #script to create html from source code. reads source code from the file passed
-#as command line arg.
+#as command line arg. changes tab size from 4 spaces to 2 spaces.
 
 import sys
 import os
@@ -25,10 +25,10 @@ def prettify():
     codeLines = code.splitlines()
 
     print('<div class="code">')
-    print(tab + '<code>')
+    print(tab + '<pre>')
     for line in codeLines:
-        print(tab + tab + line.replace('    ', '&nbsp&nbsp '))
-    print(tab + '</code>')
+        print(tab + tab + line.replace(codeTab, tab))
+    print(tab + '</pre>')
     print('</div>')
 
 prettify()
