@@ -3,7 +3,7 @@ body {
   background-repeat: repeat;
   font-family: Verdana, sans-serif;
   margin: auto;
-  max-width: 50em;
+  /*max-width: 50em;*/
 }
 
 h1 {
@@ -35,6 +35,8 @@ div {
   padding-right: 5%;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
+  max-width: 55em;
+  margin: 1em auto;
 }
 
 div.pic {
@@ -109,8 +111,8 @@ footer {
   color: white;
   padding: 1em;
   bottom: 0;
-  max-width: 50em;
-  margin-top: 1em;
+  margin: 1em auto;
+  max-width: 65em;
 }
 
 footer a {
@@ -124,8 +126,17 @@ header {
   padding: 0.5em;
 }
 
-header table {
-  border-spacing: 0.5em;
+header strong {
+  font-size: 150%;
+}
+
+header ul {
+  list-style: none;
+}
+
+header li {
+  display: inline;
+  padding-right: 0.75em;
 }
 
 header a {
