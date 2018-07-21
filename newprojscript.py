@@ -4,7 +4,7 @@ import sys
 import os
 
 ###create new project page
-def newPage():
+def newPage(indexPageFilename):
 
    #Check command line args
    if(len(sys.argv) != 5):
@@ -13,8 +13,6 @@ def newPage():
       print("  python newprojscript.py 'filename(no extension)' 'project name' 'link to github repo URL' 'project description'")
       return
 
-   #file to put website content in
-   indexPageFilename = sys.argv[1] + "-index.html"
    #name of project
    projectName = sys.argv[2]
    #URL for github repo
@@ -30,7 +28,7 @@ def newPage():
    #The content for the new page
    mainContent = '''<!DOCTYPE html><html><head>
    <meta charset="UTF-8">
-   <link rel="stylesheet" type="text/css" href="style/stylesheet.css">
+   <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
    <title>Egan Dunning</title></head>
    <body>
    <header>
@@ -67,7 +65,7 @@ def newPage():
 
 
 ###Add link to new project page to index
-def updateIndex():
+def updateIndex(indexPageFilename):
 
    #Check command line args
    if(len(sys.argv) != 5):
@@ -81,10 +79,6 @@ def updateIndex():
       print("The website broke... projects.html is missing")
       return
 
-   #file to link to
-   indexPageFilename = sys.argv[1] + "-index.html"
-   #project name
-   projectName = sys.argv[2]
    #project description
    projectDesc = sys.argv[4]
 
@@ -112,5 +106,9 @@ def updateIndex():
    indexFile.write(beforeLinks + links)
    indexFile.close()
 
-newPage()
-updateIndex()
+
+#file to put website content in
+indexPageFilename = "projects/" + sys.argv[1] + "-index.html"
+
+newPage(indexPageFilename)
+updateIndex(indexPageFilename)
