@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
+  <title>Egan Dunning</title></head>
+  <body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>text2vbastring</h2>
+    <ul>
+      <li><a href="https://github.com/egandunning/text2vbastring">Github repository</a></li>
+    </ul>
+    <h3>About Project</h3>
+    <p>
+      This program is a GUI where you can paste/type text into an editor, and
+      get a valid VBA string literal as output.
+    </p>
+    <h4>Motivation</h4>
+    <p>
+      I made an Excel macro to fetch rows from a database. I just wanted to
+      hardcode the query to save some time. But, the SQL statement was about
+      80 lines long, and I found out that Visual Basic has a few limitations
+      that impact string literals.
+      <ol>
+        <li>
+          Line length is limited to 1023 characters. This means that I can't
+          just put a huge query on one line.
+        </li>
+        <li>
+          Each statement can only have 25 line continuation characters. This
+          means that I can't do something like this:
+          <div class="code">
+            <label>VBA</label>
+            <pre>
+            myStr = "line 1" & _
+            "line 2" & _
+            ...
+            "line 100"
+            </pre>
+          </div>
+
+          Instead, the statement has to be broken up:
+          <div class="code">
+            <label>VBA</label>
+            <pre>
+            myStr = "line 1" & _
+            "line 2" & _
+            ...
+            "line 25"
+            myStr = myStr & "line 26" & _
+            ...
+            "line 100"
+            </pre>
+            </div>
+        </li>
+      </ol>
+    </p>
+    <p>
+      The text2vbastring tool handles both of these limitations automatically:
+      all you need to do is paste and/or type text into the text box, then copy
+      and paste the output directly into the Excel VBA editor!
+    </p>
+    
+    <figure>
+      <img src="../style/text2vba.gif"
+        alt="application demonstration"/>
+      <figcaption>Pasting a string into the text box.</figcaption>
+    </figure>
+    
+    <h3>Download</h3>
+    <ul>
+      <li>Includes text2vbastring.jar, readme.txt, license.txt(MIT)</li>
+      <li><a href="../documents/text2vbastring.zip">Download now</a> (6KB)</li>
+    </ul>
+    <p>
+      SHA256 sum:
+      <code>c60c106560a7af69021a25bd8c799a7e30b67d0ed561cf3649209c8a4e269002</code>
+    </p>
+  </div>
+  <footer>
+    <script src="../footer.js"></script>
+  </footer>
+  </body>
+</html>
