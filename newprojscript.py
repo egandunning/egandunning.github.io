@@ -6,62 +6,63 @@ import os
 ###create new project page
 def newPage(indexPageFilename):
 
-   #Check command line args
-   if(len(sys.argv) != 5):
-      print("Incorrect usage!!!")
-      print("run the following command to generate a new project page:")
-      print("  python newprojscript.py 'filename(no extension)' 'project name' 'link to github repo URL' 'project description'")
-      return
+  #Check command line args
+  if(len(sys.argv) != 5):
+    print("Incorrect usage!!!")
+    print("run the following command to generate a new project page:")
+    print("  python newprojscript.py 'filename(no extension)' 'project name' 'link to github repo URL' 'project description'")
+    return
 
-   #name of project
-   projectName = sys.argv[2]
-   #URL for github repo
-   githubRepo = sys.argv[3]
+  #name of project
+  projectName = sys.argv[2]
+  #URL for github repo
+  githubRepo = sys.argv[3]
 
-   #Check if file exists. if file exists, exit.
-   if(os.path.isfile(indexPageFilename)):
-      print("The file " + indexPageFilename + " exists, exiting.")
-      return
-   #otherwise, create new file
-   indexPage = open(indexPageFilename, 'w')
+  #Check if file exists. if file exists, exit.
+  if(os.path.isfile(indexPageFilename)):
+    print("The file " + indexPageFilename + " exists, exiting.")
+    return
+  #otherwise, create new file
+  indexPage = open(indexPageFilename, 'w')
 
-   #The content for the new page
-   mainContent = '''<!DOCTYPE html><html><head>
-   <meta charset="UTF-8">
-   <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
-   <title>Egan Dunning</title></head>
-   <body>
-   <header>
-     <script src="header.js"></script>
-   </header>
-   <div>
-     <h2>''' + projectName + '''</h2>
-     <ul>
-       <li><a href="''' + githubRepo + '''">Github repository</a></li>
-     </ul>
-     <h3>About Project</h3>
-     <p>
-       
-     </p>
-     
-     <h3>Download</h3>
-     <ul>
-       <li>Includes [executable], readme.txt, license.txt</li>
-       <li><a href="#">Download now</a> (size)</li>
-     </ul>
-     <p>
-       SHA256 sum:
-       <code>checksum</code>
-     </p> 
-   <footer>
-     <script src="footer.js"></script>
-   </footer>
-   </body>
-   </html>'''
+  #The content for the new page
+  mainContent = '''<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
+  <title>Egan Dunning</title></head>
+  <body>
+  <header>
+    <script src="header.js"></script>
+  </header>
+  <div>
+    <h2>''' + projectName + '''</h2>
+    <ul>
+      <li><a href="''' + githubRepo + '''">Github repository</a></li>
+    </ul>
+    <h3>About Project</h3>
+    <p>
+      
+    </p>
+    
+    <h3>Download</h3>
+    <ul>
+      <li>Includes [executable], readme.txt, license.txt</li>
+      <li><a href="#">Download now</a> (size)</li>
+    </ul>
+    <p>
+      SHA256 sum:
+      <code>checksum</code>
+    </p>
+  </div>
+  <footer>
+    <script src="../footer.js"></script>
+  </footer>
+  </body>
+  </html>'''
 
-   #add content to new page and flush
-   indexPage.write(mainContent)
-   indexPage.close()
+  #add content to new page and flush
+  indexPage.write(mainContent)
+  indexPage.close()
 
 
 ###Add link to new project page to index
