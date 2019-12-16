@@ -48,6 +48,8 @@ var pauseStartTime = 0;
 var elapsedTime = 0;
 
 var isRunning = false;
+var rocketCount = 0;
+var nextLvlUp = 1000;
 
 var frameCounter = 0;
 
@@ -370,6 +372,7 @@ class Rocket extends Circle {
     }
     
     fire(x, y, targetX, targetY) {
+        rocketCount--;
         this.visible = true;
         for (var i = 0; i < ghosts.length; i++) {
             if (Math.sqrt(Math.pow(ghosts[i].x - targetX, 2) + Math.pow(ghosts[i].y - targetY, 2)) < ghosts[i].radius + this.lockRange) {
@@ -529,6 +532,21 @@ class LaserPowerup extends Powerup {
         this.activateTime = false;
     }
 }
+
+class RocketPowerup extends Powerup {
+    constructor(x, y) {
+        super(x, y, 'R', 'ROCKET', 'rgba(0, 0, 255, 0.5)');
+    }
+    
+    activate() {
+        rocketCount++;
+    }
+    
+    deactivate() {
+        this.activateTime = -1;
+    }
+}
+        
         
 class HealthPowerup extends Powerup {
     constructor(x, y) {
@@ -690,6 +708,10 @@ class Spawner {
     spawn() {
         // Dummy method
     }
+    
+    upgrade() {
+        // Dummy method
+    }
 }
 
 class GhostSpawner extends Spawner {
@@ -760,8 +782,9 @@ class PowerupSpawner extends Spawner {
         this.radius = 10;
         this.speed = 7;
         this.speedProb = .5;
-        this.laserProb = .3;
-        this.healthProb = .2;
+        this.laserProb = .2;
+        this.rocketProb = .2;
+        this.healthProb = .1;
     }
     
     spawn() {
@@ -775,7 +798,9 @@ class PowerupSpawner extends Spawner {
             powerup = new Powerup(xCoord, yCoord, 'S', 'SPEED BOOST', 'rgba(0, 0, 255, 0.5)');
         } else if ((powerupSelection -= this.speedProb) < this.laserProb) {
             powerup = new LaserPowerup(xCoord, yCoord);
-        } else if ((powerupSelection -= this.laserProb) < this.healthProb) {
+        } else if ((powerupSelection -= this.laserProb) < this.rocketProb) {
+            powerup = new RocketPowerup(xCoord, yCoord);
+        } else if ((powerupSelection -= this.rocketProb) < this.healthProb) {
             powerup = new HealthPowerup(xCoord, yCoord);
         }
         powerup.vx = (Math.random() - 0.5) * this.speed;
@@ -968,6 +993,16 @@ function draw() {
         pointSpawner.spawnIfReady(currentTime);
         powerupSpawner.spawnIfReady(currentTime);
     }
+    
+    if (score >= nextLvlUp) {
+        ghostSpawner.upgrade();
+        pointSpawner.upgrade();
+        powerupSpawner.upgrade();
+        nextLvlUp *= 2;
+        textSlide = new TextSlide('LEVEL UP', 'italic bold 50px serif');
+        drawTextSlide();
+    }
+    
     // Move & draw dot
     var xMove = Math.abs(dot.x - mx) > 0.1;
     var yMove = Math.abs(dot.y - my) > 0.1;
@@ -1049,7 +1084,14 @@ function setupScene() {
 }
 
 function start() {
+    
+    // Clean up
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctxEL.clearRect(0, 0, ctxEL.canvas.width, ctxEL.canvas.height);
+    ctxUI.clearRect(0, 0, ctxUI.canvas.width, ctxUI.canvas.height);
+    
     startButton.innerText = 'Pause';
+    nextLvlUp = 1000;
     raf = window.requestAnimationFrame(draw);
     if (pauseStartTime == 0) {
         setupScene();
@@ -1106,7 +1148,7 @@ viewDiv.addEventListener('mousedown', function(e) {
         case 2:
             if (laserActive) {
                 laser.startFiring();
-            } else {
+            } else if (rocketCount > 0) {
                 rocket = new Rocket(dot.x, dot.y, 1, 40);
                 rocket.fire(dot.x, dot.y, e.clientX - rect.left, e.clientY - rect.top)
             }
@@ -1153,52 +1195,3 @@ viewDiv.addEventListener('mouseup', function(e) {
 opacitySlider.onchange = function() {
     ctxUI.globalAlpha = opacitySlider.value;
 }
-
-////////TEST STUFF/////////
-/*var x = 100;
-var y = 100;
-// rktWidth = 4;
-// var rktLength = 6;
-// var rktCone = 3;
-// var finWidth = 1;
-// var finLength = 1;
-ctx.save();
-ctx.fillStyle = 'black';
-ctx.translate(this.x, this.y);
-ctx.rotate(this.angle);
-ctx.beginPath();
-// Body
-// -(rktWidth/2), 0, rktWidth, rktLength
-ctx.fillRect(-2, 0, 4, 6);
-ctx.beginPath();
-// Cone
-// -(rktWidth/4), rktWidth, (rktWidth/2), rktCone
-ctx.fillRect(-1, 4, 2, 3);
-ctx.fill();
-ctx.beginPath();
-// Fins
-// -(rktWidth/2), finWidth, fin position, finLength
-ctx.fillRect(-2, 1, -1, -4);
-// (rktWidth/2), finWidth, fin position, finLength
-ctx.fillRect(2, 1, 1, -4);
-// -(rktWidth/2), finWidth, one px, one px
-ctx.fillRect(-2, -1, 1, 1);
-// (rktWidth/2) - 1, finWidth, one px, one px
-ctx.fillRect(1, -1, 1, 1);
-// Fire
-ctx.fillStyle = 'yellow';
-ctx.fillRect(-1, -3, 2, 2);
-ctx.fillStyle = 'orange';
-ctx.fillRect(-1, -5, 2, 2);
-ctx.fillStyle = 'red';
-ctx.fillRect(-1, -6, 2, 1);
-ctx.fillRect((Math.random() > 0.5) ? -1 : 0, -8, 1, 1);
-ctx.fillRect((Math.random() > 0.5) ? -1 : 0, -10, 1, 1);
-if (Math.random() > 0.5) {
-    ctx.fillRect(-1, -7, 2, 1);
-} else {
-    ctx.fillRect(-1, -9, 2, 1);
-}
-ctx.restore();
-
-*/
