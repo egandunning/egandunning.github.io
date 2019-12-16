@@ -695,7 +695,7 @@ class Spawner {
     }
     
     init() {
-        this.startTime = currentTime;
+        this.startTime = Date.now();
     }
     
     spawnIfReady(currentTime) {
@@ -1092,7 +1092,7 @@ function start() {
     
     startButton.innerText = 'Pause';
     nextLvlUp = 1000;
-    raf = window.requestAnimationFrame(draw);
+    
     if (pauseStartTime == 0) {
         setupScene();
         startTime = Date.now();
@@ -1101,6 +1101,7 @@ function start() {
         pauseStartTime = 0;
     }
     isRunning = true;
+    raf = window.requestAnimationFrame(draw);
 }
 
 function pause() {
