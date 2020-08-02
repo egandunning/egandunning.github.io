@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="stylesheet" href="style/respond.css"/>
+  </head>
+  <body>
+    <h1 style='font-size:14pt; text-style:bold;'>Ghost Chase v0.1</h1>
+    <button id="start_pause">Start</button> |
+    <input type="checkbox" id="disableRightClick" checked>Disable right click</input> |
+    Score: <span id="score">0</span> |
+    High Score: <span id="high_score">0</span> |
+    <span id="field3">temp</span> |
+    <input type="range" start="0.8" min="0" max="1" step="0.1" id="opacity">UI Opacity</input> |
+    <br>
+    <div id="view" style="position: relative;">
+      <canvas id="canvas" style="position:absolute; left:0; top:0; z-index:0; border: 1px solid lightgrey;">
+        Your browser doesn't support this page :(
+      </canvas>
+      <canvas id="effectsLayer" style="position:absolute; left:0; top:0; z-index:1;">
+        Your browser doesn't support this page :(
+      </canvas>
+      <canvas id="uiLayer" style="position:absolute; left:0; top:0; z-index:2;">
+        Your browser doesn't support this page :(
+      </canvas>
+	<script src="script.js"></script>
+  </body>
+</html>
