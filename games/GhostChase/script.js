@@ -78,6 +78,7 @@ var textSlide;
 
 // Debug Flags
 var NOSPAWN = false;
+var ROCKETMAN = false;
 
 /*************************************
  * CANVAS SETUP                      *
@@ -367,16 +368,26 @@ class Rocket extends Circle {
         this.snap = 2;
         this.angle = Math.PI / 2;
         this.visible = false;
-        this.lockRange = 15;
+        this.lockRange = 100;
         this.explodeRadius = 40;
     }
     
     fire(x, y, targetX, targetY) {
         rocketCount--;
         this.visible = true;
+        
+        // Lock on to the first ghost in range
         for (var i = 0; i < ghosts.length; i++) {
-            if (Math.sqrt(Math.pow(ghosts[i].x - targetX, 2) + Math.pow(ghosts[i].y - targetY, 2)) < ghosts[i].radius + this.lockRange) {
+            if (Math.sqrt(Math.pow(ghosts[i].x - targetX, 2) + Math.pow(ghosts[i].y - targetY, 2)) < this.lockRange) {
                 this.targetGhost = ghosts[i];
+                ghosts[i].decorate = function(x, y) {
+                    ctx.textAlign = "center";
+                    ctx.strokeStyle = "black";
+                    ctx.font = "bold 10pt sans-serif";
+                    ctx.fillStyle = "black"
+                    ctx.fillText("TARGET LOCK", x, y - 7);
+                    ctx.strokeRect(x - 5, y - 5, 10, 10);
+                }
                 return;
             }
         }
@@ -396,13 +407,13 @@ class Rocket extends Circle {
             this.angle = ((this.targetX - this.x) > 0 ? -1 : 1) * Math.PI / 2 + Math.atan((this.targetY - this.y) / (this.targetX - this.x));
             this.targetX = this.targetGhost.x;
             this.targetY = this.targetGhost.y;
-        }
-        this.acceleration += this.snap;
-        super.updateVelocity(this.targetX, this.targetY);
-        if (this.vx == 0 && this.vy == 0) {
+        } else if (Math.abs(this.x - this.targetX) < 1.5 && Math.abs(this.x - this.targetX) < 1.5) {
+            // Detonate if close to target
             this.detonate();
             return;
         }
+        this.acceleration += this.snap;
+        super.updateVelocity(this.targetX, this.targetY);
         super.move();
     }
     
@@ -566,6 +577,7 @@ class Ghost extends Circle {
     constructor(x, y, ghostSpeed, radius) {
         super(x, y, ghostSpeed, radius);
         this.visible = true;
+        this.decorate = null;
     }
     
     draw() {
@@ -574,6 +586,9 @@ class Ghost extends Circle {
         ctx.closePath();
         ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
         ctx.fill();
+        if (this.decorate != null) {
+            this.decorate(this.x, this.y);
+        }
     }    
 }
 
@@ -638,6 +653,18 @@ class SneakyGhost extends Ghost {
     stopSneaking() {
         this.isSneaky = false;
         this.startTime = currentTime;
+    }
+}
+
+class HungryGhost extends Ghost {
+    constructor(x, y, ghostSpeed, radius) {
+        super(x, y, ghostSpeed, radius);
+        
+    }
+    
+    updateVelocity(x, y) {
+        // Move toward point
+        // Destroy point on intersect
     }
 }
 
@@ -719,13 +746,14 @@ class GhostSpawner extends Spawner {
         super(5);
         this.maxSpeed = 4.5;
         this.radiusMultiplier = 20;
-        this.sneakyGhostChance = 0.2;
+        this.sneakyGhostChance = 0.25;
+        this.hungryGhostChance = 0.05;
         this.spawnRadius = Math.max(ctx.canvas.width, ctx.canvas.height) / 2;
     }
     
     upgrade() {
         this.maxSpeed += 0.25;
-        this.interval--;
+        if (this.interval > 1) this.interval--;
     }
     
     spawnCoords() {
@@ -742,7 +770,10 @@ class GhostSpawner extends Spawner {
         var coords = this.spawnCoords();
         var speed = Math.random() * this.maxSpeed;
         var radius = Math.ceil(1 + (this.radiusMultiplier - 1) / speed);
-        if (Math.random() < this.sneakyGhostChance) {
+        var ghostRandom = Math.random();
+        if (ghostRandom < this.hungryGhostChance) {
+            ghosts.push(new HungryGhost(coords.x, coords.y, 2, 30));
+        } else if (ghostRandom < this.sneakyGhostChance) {
             ghosts.push(new SneakyGhost(coords.x, coords.y, speed, radius));
         } else {
             ghosts.push(new Ghost(coords.x, coords.y, speed, radius));
@@ -1114,6 +1145,8 @@ function pause() {
 function stop() {
     startButton.innerText = 'Start';
     laser.stopFiring();
+    laserActive = false;
+    rocketCount = 0;
     window.cancelAnimationFrame(raf);
     isRunning = false;
     
@@ -1148,8 +1181,10 @@ viewDiv.addEventListener('mousedown', function(e) {
             break;
         case 2:
             if (laserActive) {
+                laser.targetX = e.clientX - rect.left;
+                laser.targetY = e.clientY - rect.top;
                 laser.startFiring();
-            } else if (rocketCount > 0) {
+            } else if (ROCKETMAN || rocketCount > 0) {
                 rocket = new Rocket(dot.x, dot.y, 1, 40);
                 rocket.fire(dot.x, dot.y, e.clientX - rect.left, e.clientY - rect.top)
             }
