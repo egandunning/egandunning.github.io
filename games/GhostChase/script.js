@@ -65,7 +65,7 @@ var ghosts;
 var powerups;
 var points;
 var laser;
-var rocket;
+var rockets;
 
 // Object spawners
 var ghostSpawner;
@@ -659,12 +659,17 @@ class SneakyGhost extends Ghost {
 class HungryGhost extends Ghost {
     constructor(x, y, ghostSpeed, radius) {
         super(x, y, ghostSpeed, radius);
-        
+        this.food = null;
     }
     
     updateVelocity(x, y) {
         // Move toward point
-        // Destroy point on intersect
+        if (this.food && this.food < points.length) {
+            super.updateVelocity(points[this.food].x, points[this.food].y)
+        } else if (this.food == null && points.length > 0) {
+            this.food = Math.floor((Math.random() * points.length))
+            super.updateVelocity(points[this.food].x, points[this.food].y)
+        }
     }
 }
 
@@ -747,7 +752,7 @@ class GhostSpawner extends Spawner {
         this.maxSpeed = 4.5;
         this.radiusMultiplier = 20;
         this.sneakyGhostChance = 0.25;
-        this.hungryGhostChance = 0.05;
+        this.hungryGhostChance = 0.1;
         this.spawnRadius = Math.max(ctx.canvas.width, ctx.canvas.height) / 2;
     }
     
@@ -812,9 +817,9 @@ class PowerupSpawner extends Spawner {
         super(15);
         this.radius = 10;
         this.speed = 7;
-        this.speedProb = .5;
-        this.laserProb = .2;
-        this.rocketProb = .2;
+        this.speedProb = .45;
+        this.laserProb = .225;
+        this.rocketProb = .225;
         this.healthProb = .1;
     }
     
@@ -942,15 +947,14 @@ function draw() {
     field3.innerText = frameCounter++;
     
     // Calculate points
-    for (var i = 0; i < points.length; i++) {
-        
-        if (points[i].visible) {
-            points[i].move();
-            points[i].draw();
-        }
-        
+    for (var i = points.length - 1; i >= 0; i--) {
         if (points[i].visible && circleCollide(dot, points[i])) {
             points[i].score();
+            points.splice(i, 1);
+        } else if (points[i].visible) {
+            points[i].move();
+            points[i].draw();
+        } else {
             points.splice(i, 1);
         }
     }
@@ -958,16 +962,16 @@ function draw() {
     scoreField.innerText = score;
     
     // Remove deactivated ghosts
-    for (var i = ghosts.length - 1; i >= 0; i--) {
-        if (!ghosts[i].visible) {
-            ghosts.splice(i, 1);
-        }
-    }
+    // for (var i = ghosts.length - 1; i >= 0; i--) {
+        // if (!ghosts[i].visible) {
+            // ghosts.splice(i, 1);
+        // }
+    // }
     
     // Calculate ghost collision
     var ghostCollision = false;
     
-    for (var i = 0; i < ghosts.length; i++) {
+    for (var i = ghosts.length - 1; i >= 0; i--) {
         if (ghosts[i].visible) {
             ghosts[i].updateVelocity(dot.x, dot.y);
             ghosts[i].move();
@@ -975,6 +979,8 @@ function draw() {
             if (circleCollide(dot, ghosts[i])) {
                 ghostCollision = true;
             }
+        } else {
+            ghosts.splice(i, 1);
         }
     }
     
@@ -1061,17 +1067,21 @@ function draw() {
         });
     }
     
-    // Draw rocket
-    if (rocket != null && rocket.visible) {
-        rocket.track();
-        rocket.draw();
-        ghosts.forEach(function(g) {
-            if (circleCollide(rocket, g)) {
-                //drawExplode(g.x, g.y, 1);
-                g.visible = false;
-                rocket.detonate();
-            }
-        });
+    // Draw rockets
+    for (var i = rockets.length - 1; i >= 0; i--) {
+      if (rockets[i] != null && rockets[i].visible) {
+          rockets[i].track();
+          rockets[i].draw();
+          ghosts.forEach(function(g) {
+              if (circleCollide(rockets[i], g)) {
+                  //drawExplode(g.x, g.y, 1);
+                  g.visible = false;
+                  rockets[i].detonate();
+              }
+          });
+      } else {
+          rockets.splice(i, 1);
+      }
     }
     
     // Draw next frame
@@ -1091,7 +1101,7 @@ function setupScene() {
     ghosts = [g1, g2];
     
     laser = new Laser(0, 0, 0, 0);
-    rocket = null;
+    rockets = [];
     
     //var powerup1 = new Powerup(100, 50, 'S', 'SPEED BOOST', 'rgba(0, 0, 255, 0.5)');
     /*var powerup1 = new LaserPowerup(50, 50);
@@ -1185,8 +1195,9 @@ viewDiv.addEventListener('mousedown', function(e) {
                 laser.targetY = e.clientY - rect.top;
                 laser.startFiring();
             } else if (ROCKETMAN || rocketCount > 0) {
-                rocket = new Rocket(dot.x, dot.y, 1, 40);
+                var rocket = new Rocket(dot.x, dot.y, 1, 40);
                 rocket.fire(dot.x, dot.y, e.clientX - rect.left, e.clientY - rect.top)
+                rockets.push(rocket);
             }
             break;
         default:
@@ -1208,13 +1219,12 @@ viewDiv.oncontextmenu = function(e) {
 /**
  * Only allow drag to move with primary mouse button.
  */
-laser = new Laser(0, 0, 0, 0); // avoid type error
 viewDiv.addEventListener('mousemove', function(e) {
     if (e.button == 0 && e.buttons != 2 && isDragging) {
         getMouseCoords(e);
     }
     
-    if (laser.firing) {
+    if (laser && laser.firing) {
         laser.targetX = e.clientX - rect.left;
         laser.targetY = e.clientY - rect.top;
     }
